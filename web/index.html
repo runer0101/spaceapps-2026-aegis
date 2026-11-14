@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AEGIS · Crew Health Sentinel</title>
+    <link rel="stylesheet" href="/css/app.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">AEGIS</span>
+        <span class="brand-sub">Crew Health Sentinel · Mars transit</span>
+      </div>
+
+      <label class="control">
+        <span>Scenario</span>
+        <select id="scenario-select" aria-label="Scenario"></select>
+      </label>
+
+      <button id="play-toggle" class="control button" type="button" aria-pressed="true">
+        Pause
+      </button>
+
+      <label class="control">
+        <span>Speed</span>
+        <select id="speed-select" aria-label="Playback speed">
+          <option value="0.05">×5</option>
+          <option value="0.18" selected>×1</option>
+          <option value="0.5">slow</option>
+        </select>
+      </label>
+
+      <div class="mission-clock">
+        <span id="mission-day" class="clock-value">Day 0</span>
+        <span id="mission-date" class="clock-sub">—</span>
+        <span id="mission-phase" class="clock-phase">—</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel panel-3d" aria-label="Mission view">
+        <div class="panel-head">
+          <h2>Mission</h2>
+          <span id="scene-status" class="pill">connecting…</span>
+        </div>
+        <div id="scene" class="scene-mount"></div>
+      </section>
+
+      <section class="panel panel-crew" aria-label="Crew status">
+        <div class="panel-head">
+          <h2>Crew</h2>
+          <span class="pill pill-quiet">4 aboard</span>
+        </div>
+        <div id="crew" class="crew-grid"></div>
+      </section>
+
+      <section class="panel panel-alerts" aria-label="Alerts">
+        <div class="panel-head">
+          <h2>Alerts</h2>
+          <span id="alert-count" class="pill pill-quiet">0</span>
+        </div>
+        <ul id="alerts" class="alert-list"></ul>
+      </section>
+
+      <section class="panel panel-charts" aria-label="Trends">
+        <div class="panel-head">
+          <h2>Trends</h2>
+          <span class="pill pill-quiet">mission elapsed time</span>
+        </div>
+        <div id="charts" class="charts"></div>
+      </section>
+
+      <section class="panel panel-triage" aria-label="Evidence triage">
+        <div class="panel-head">
+          <h2>Evidence triage</h2>
+          <span id="triage-badge" class="pill pill-quiet">awaiting data</span>
+        </div>
+        <div id="triage" class="triage"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>
+        Simulated crew on published physiology rates · solar activity from NASA DONKI ·
+        thresholds cited from NASA-STD-3001 and peer-reviewed sources.
+      </span>
+      <a href="/api/scenarios">API</a>
+    </footer>
+
+    <script type="module" src="/js/app.js"></script>
+    <script type="module" src="/js/dashboard.js"></script>
+    <script type="module" src="/js/scene.js"></script>
+  </body>
+</html>
