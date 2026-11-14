@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "note": "Data contract shared by the pipeline, the scenario engine and the web client. Every value traces to a public source listed below.",
+  "sources": {
+    "donki_sep": {
+      "title": "DONKI Space Weather Event API — Solar Energetic Particles",
+      "endpoint": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/SEP",
+      "publisher": "NASA CCMC, Goddard Space Flight Center",
+      "access": "open, no key, CORS enabled, query window limited to 60 days",
+      "file": "data/donki-sep.json"
+    },
+    "osdr_bone": {
+      "title": "NASA Open Science Data Repository — ALSDA bone loss studies",
+      "endpoint": "https://osdr.nasa.gov/osdr/data/search",
+      "publisher": "NASA OSDR, Ames Research Center",
+      "access": "open, no key",
+      "file": "data/osdr-bone-studies.json"
+    }
+  },
+  "units": {
+    "dose_msv": "millisievert, accumulated equivalent dose",
+    "gcr_msv_day": "millisievert per day, galactic cosmic radiation inside shielding",
+    "sep_flux_pfu": "proton flux units (>10 MeV), 1 pfu = 1 particle cm^-2 s^-1 sr^-1",
+    "sleep_h": "hours slept in the last 24 h",
+    "hr_bpm": "beats per minute",
+    "spo2_pct": "percent blood oxygen saturation",
+    "bmd_pct": "percent change in bone mineral density versus pre-flight baseline",
+    "shield_g_cm2": "areal density of spacecraft shielding"
+  },
+  "tick": {
+    "description": "One telemetry frame. Emitted once per simulated time step by the scenario engine, forwarded verbatim by the SSE endpoint and publishable to MQTT unchanged.",
+    "fields": {
+      "t_day": "float, mission elapsed time in days",
+      "phase": "transit_out | surface | transit_return",
+      "scenario": "string, id of the active scenario",
+      "environment": {
+        "sep_active": "bool",
+        "sep_flux_pfu": "float",
+        "sep_event_id": "string or null, DONKI sepID",
+        "gcr_msv_day": "float",
+        "shield_g_cm2": "float"
+      },
+      "crew": [
+        {
+          "id": "string, 3-letter crew designation",
+          "role": "string",
+          "hr_bpm": "float",
+          "spo2_pct": "float",
+          "sleep_h": "float",
+          "stress_index": "float 0..1",
+          "bmd_pct": "float",
+          "dose_msv": "float, accumulated",
+          "dose_rate_msv_day": "float"
+        }
+      ],
+      "alerts": [
+        {
+          "indicator": "string",
+          "severity": "info | warning | critical",
+          "crew": "string or 'crew'",
+          "value": "float",
+          "threshold": "float",
+          "message": "string",
+          "source": "string, citation of the threshold or the driving event"
+        }
+      ]
+    }
+  }
+}

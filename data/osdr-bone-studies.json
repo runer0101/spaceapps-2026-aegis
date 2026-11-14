@@ -1,0 +1,737 @@
+{
+ "source": "NASA Open Science Data Repository (ALSDA)",
+ "endpoint": "https://osdr.nasa.gov/osdr/data/search",
+ "terms": [
+  "bone loss",
+  "muscle atrophy",
+  "cardiovascular",
+  "immune",
+  "radiation"
+ ],
+ "count": 58,
+ "studies": [
+  {
+   "accession": "OSD-1018",
+   "title": "Differential Impact of Social Isolation and Space Radiation on Behavior and Motor Learning in Rats",
+   "organism": "",
+   "techniques": [
+    "Balance Beam"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-121",
+   "title": "Biological Research in Canisters-16 (BRIC-16): Transcriptomics, Glycomics, and Morphometric photography.",
+   "organism": "",
+   "techniques": [
+    "DNA microarray",
+    "Image analysis",
+    "ELISA"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-137",
+   "title": "Rodent Research-3-CASIS: Mouse liver transcriptomic, proteomic, epigenomic and histology data",
+   "organism": "",
+   "techniques": [
+    "mass spectrometry",
+    "Whole Genome Bisulfite Sequencing",
+    "RNA Sequencing (RNA-Seq)",
+    "Microscopy"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-310",
+   "title": "Spaceflight-induced (STS-62) vertebral bone loss in ovariectomized rats is associated with increased bone marrow adiposity and no change in bone formation",
+   "organism": "",
+   "techniques": [
+    "Histomorphometry"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-351",
+   "title": "Effects of Spaceflight on Bone Microarchitecture in the Axial and Appendicular Skeleton in Growing Ovariectomized Rats from STS-62",
+   "organism": "",
+   "techniques": [
+    "Micro-Computed Tomography"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-366",
+   "title": "Coalescence of DNA double strand breaks induced by galactic cosmic radiation is modulated by genetics in 15 inbred strains of mice",
+   "organism": "",
+   "techniques": [
+    "Genome-Wide Association Study",
+    "Immunostaining"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-435",
+   "title": "Effects of low-dose oxygen ions and protons on cardiac function and structure in male C57BL/6J mice (echocardiogram/ultrasonography)",
+   "organism": "",
+   "techniques": [
+    "Ultrasonography",
+    "Ultrasonography"
+   ],
+   "matched_terms": [
+    "cardiovascular"
+   ]
+  },
+  {
+   "accession": "OSD-47",
+   "title": "Rodent Research-1 (RR1) National Lab Validation Flight: Mouse liver transcriptomic, proteomic, epigenomic and histology data",
+   "organism": "",
+   "techniques": [
+    "RNA Sequencing (RNA-Seq)",
+    "mass spectrometry",
+    "Whole Genome Bisulfite Sequencing",
+    "Microscopy"
+   ],
+   "matched_terms": [
+    "muscle atrophy"
+   ]
+  },
+  {
+   "accession": "OSD-471",
+   "title": "Spaceflight-Induced Bone Loss Alters Failure Mode and Reduces Bending Strength in Murine Spinal Segments from Bion-M1",
+   "organism": "",
+   "techniques": [
+    "Micro-Computed Tomography"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-477",
+   "title": "Dose-dependent skeletal deficits due to varied reductions in mechanical loading in rats (Femur - microCT, three-point bending, histomorphometry)",
+   "organism": "",
+   "techniques": [
+    "Bone biomechanical measurement",
+    "Micro-Computed Tomography",
+    "Histomorphometry"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-479",
+   "title": "The impact of deep space radiation on cognitive performance: From biological sex to biomarkers to countermeasures (Elevated Plus Maze, Novel Object Recognition, Open Field, Radial Arm Water Maze, and Three Chamber Social Isolation/Interaction)",
+   "organism": "",
+   "techniques": [
+    "Elevated Plus Maze",
+    "Novel Object Recognition",
+    "Open Field",
+    "RAWM",
+    "Three Chamber Social Isolation"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-48",
+   "title": "Rodent Research-1 (RR1) NASA Validation Flight: Mouse liver transcriptomic, proteomic, epigenomic and histology data",
+   "organism": "",
+   "techniques": [
+    "RNA Sequencing (RNA-Seq)",
+    "mass spectrometry",
+    "Microscopy",
+    "Whole Genome Bisulfite Sequencing",
+    "Whole Transcriptome Bisulfite Sequencing"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-486",
+   "title": "Fifteen days of microgravity causes growth in calvaria of mice (STS-131)",
+   "organism": "",
+   "techniques": [
+    "Micro-Computed Tomography"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-488",
+   "title": "Characterizing SERCA Function in Murine Skeletal Muscles after 35-37 Days of Spaceflight from RR-1 and RR-9 (calcium uptake and Western blot in soleus and tibialis anterior)",
+   "organism": "",
+   "techniques": [
+    "Spectrofluorimetric Assay",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot"
+   ],
+   "matched_terms": [
+    "muscle atrophy"
+   ]
+  },
+  {
+   "accession": "OSD-489",
+   "title": "Quantifying Cancellous Bone Structural Changes in Microgravity: Axial Skeleton Results from the RR-1 Mission",
+   "organism": "",
+   "techniques": [
+    "Micro-Computed Tomography"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-490",
+   "title": "Elevated plus-maze performance of Fischer-344 rats as a function of age and of exposure to 56Fe particles",
+   "organism": "",
+   "techniques": [
+    "Elevated Plus Maze"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-492",
+   "title": "Effects of heavy particle irradiation and diet on object recognition memory in rats",
+   "organism": "",
+   "techniques": [
+    "Novel Object Recognition"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-557",
+   "title": "Spaceflight influences gene expression, photoreceptor integrity, and oxidative stress related damage in the murine retina (RR-9)",
+   "organism": "",
+   "techniques": [
+    "Micro-Computed Tomography",
+    "Light Microscopy",
+    "Immunostaining",
+    "Immunostaining"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-568",
+   "title": "Characterization of mouse ocular responses (Microscopy) to a 35-day (RR-9) spaceflight mission: Evidence of blood-retinal barrier disruption and ocular adaptations",
+   "organism": "",
+   "techniques": [
+    "Microscopy",
+    "Microscopy",
+    "Microscopy"
+   ],
+   "matched_terms": [
+    "immune"
+   ]
+  },
+  {
+   "accession": "OSD-569",
+   "title": "Whole Blood Measurements from the SpaceX Inspiration4 Mission (RNA-seq, epitranscriptome, WGS, clonal hematopoiesis, CBC)",
+   "organism": "",
+   "techniques": [
+    "Hematology Analyzer",
+    "long read RNA Sequencing",
+    "nucleotide sequencing",
+    "RNA Sequencing (RNA-Seq)",
+    "nucleotide sequencing"
+   ],
+   "matched_terms": [
+    "immune"
+   ]
+  },
+  {
+   "accession": "OSD-575",
+   "title": "SpaceX Inspiration4 Blood Serum Metabolic Panel and Immune/Cardiac Cytokine Arrays (Comprehensive Metabolic Panel and Multiplex)",
+   "organism": "",
+   "techniques": [
+    "Multiplex",
+    "Multiplex",
+    "Multiplex",
+    "Comprehensive Metabolic Panel"
+   ],
+   "matched_terms": [
+    "cardiovascular"
+   ]
+  },
+  {
+   "accession": "OSD-583",
+   "title": "Characterization of mouse ocular responses (intraocular pressure) to a 35-day (RR-9) spaceflight mission: Evidence of blood-retinal barrier disruption and ocular adaptations",
+   "organism": "",
+   "techniques": [
+    "Tonometry"
+   ],
+   "matched_terms": [
+    "immune"
+   ]
+  },
+  {
+   "accession": "OSD-591",
+   "title": "Effects of low-dose oxygen ions and protons on cardiac function and structure in male C57BL/6J mice (western blot, histology, and immunohistochemistry)",
+   "organism": "",
+   "techniques": [
+    "Western Blot",
+    "Microscopy",
+    "Microscopy"
+   ],
+   "matched_terms": [
+    "cardiovascular"
+   ]
+  },
+  {
+   "accession": "OSD-608",
+   "title": "Dose-dependent skeletal deficits due to varied reductions in mechanical loading in rats (Tibia - pQCT)",
+   "organism": "",
+   "techniques": [
+    "Peripheral Quantitative Computed Tomography"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-616",
+   "title": "Influence of Sex Hormones on Nervous System and Musculoskeletal Health in Micro and Martian Fractional Gravity in Rat Analogues (Force Plate; Soleus)",
+   "organism": "",
+   "techniques": [
+    "Force Plate"
+   ],
+   "matched_terms": [
+    "muscle atrophy"
+   ]
+  },
+  {
+   "accession": "OSD-617",
+   "title": "Influence of gonadectomy on muscle health in micro- and partial-gravity environments in rats (Estrous Cycle Monitoring)",
+   "organism": "",
+   "techniques": [
+    "Cytology"
+   ],
+   "matched_terms": [
+    "muscle atrophy"
+   ]
+  },
+  {
+   "accession": "OSD-618",
+   "title": "Combined space stressors induce independent behavioral deficits predicted by early peripheral blood monocytes (Behavioral Assays)",
+   "organism": "",
+   "techniques": [
+    "Elevated Plus Maze",
+    "Open Field",
+    "Three Chamber Social Isolation",
+    "Novel Object Recognition",
+    "RAWM",
+    "Balance"
+   ],
+   "matched_terms": [
+    "immune"
+   ]
+  },
+  {
+   "accession": "OSD-640",
+   "title": "Combined space stressors induce independent behavioral deficits predicted by early peripheral blood monocytes (flow cytometry)",
+   "organism": "",
+   "techniques": [
+    "Flow Cytometry"
+   ],
+   "matched_terms": [
+    "immune"
+   ]
+  },
+  {
+   "accession": "OSD-652",
+   "title": "Influence of gonadectomy on muscle health in micro- and partial-gravity environments in rats (Grip; force transducer)",
+   "organism": "",
+   "techniques": [
+    "Force Transducer"
+   ],
+   "matched_terms": [
+    "muscle atrophy"
+   ]
+  },
+  {
+   "accession": "OSD-653",
+   "title": "Influence of gonadectomy on muscle health in micro- and partial-gravity environments in rats (Tibia; pQCT)",
+   "organism": "",
+   "techniques": [
+    "Peripheral Quantitative Computed Tomography"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-654",
+   "title": "Toward countering muscle and bone loss with spaceflight: GSK3 as a potential target (Tibia, RR9 and HLU, MicroCT and DXA Scanning)",
+   "organism": "",
+   "techniques": [
+    "Micro-Computed Tomography",
+    "Dual-Energy X-Ray Absorptiometry"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-656",
+   "title": "SpaceX Inspiration4 Urine Inflammation Panel (Multiplex, NULISAseq)",
+   "organism": "",
+   "techniques": [
+    "Multiplex"
+   ],
+   "matched_terms": [
+    "immune"
+   ]
+  },
+  {
+   "accession": "OSD-660",
+   "title": "Toward countering muscle and bone loss with spaceflight: GSK3 as a potential target (Tibialis Anterior, RR9, Western Blot)",
+   "organism": "",
+   "techniques": [
+    "Western Blot"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-661",
+   "title": "Toward countering muscle and bone loss with spaceflight: GSK3 as a potential target (Lumbar Spine, HLS, DXA Scanning)",
+   "organism": "",
+   "techniques": [
+    "Dual-Energy X-Ray Absorptiometry"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-662",
+   "title": "Toward countering muscle and bone loss with spaceflight: GSK3 as a potential target (Soleus, RR1, RR9, RR18, Bion-M1, HLU/HLS, Western Blot, Histology, and Muscle Contractility)",
+   "organism": "",
+   "techniques": [
+    "Western Blot",
+    "Contractility",
+    "Microscopy"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-663",
+   "title": "Toward countering muscle and bone loss with spaceflight: GSK3 as a potential target (Femur, RR9 and HLS, DXA Scanning and Western Blot)",
+   "organism": "",
+   "techniques": [
+    "Western Blot",
+    "Dual-Energy X-Ray Absorptiometry"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-664",
+   "title": "Toward countering muscle and bone loss with spaceflight: GSK3 as a potential target (Extensor Digitorum Longus, BION-M1, Western blot)",
+   "organism": "",
+   "techniques": [
+    "Western Blot"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-691",
+   "title": "Spaceflight increases sarcoplasmic reticulum Ca2+ leak and this cannot be counteracted with BuOE treatment (Soleus muscle from RR-18, Western Blot and ATPase Assays)",
+   "organism": "",
+   "techniques": [
+    "Spectrophotometry",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot"
+   ],
+   "matched_terms": [
+    "muscle atrophy"
+   ]
+  },
+  {
+   "accession": "OSD-738",
+   "title": "Effects of Space Flight on Inflammasome Activation in the Brain of Mice (Brain, Western Blot and ECLIA)",
+   "organism": "",
+   "techniques": [
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "ECLIA"
+   ],
+   "matched_terms": [
+    "immune"
+   ]
+  },
+  {
+   "accession": "OSD-745",
+   "title": "Microbiological and Nutritional Analysis of Lettuce Crops Grown on the International Space Station (Anthocyanin Content, Phenolic Content, Elemental Analysis, ORAC)",
+   "organism": "",
+   "techniques": [
+    "Photography",
+    "Inductively Coupled Plasma Optical Emission Spectroscopy",
+    "Oxygen Radical Absorbance Capacity",
+    "Phenolic Compound Content",
+    "Anthocyanin Content"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-751",
+   "title": "Effects of Space Flight on Inflammasome Activation in the Brain of Mice (Cortex; ECLIA)",
+   "organism": "",
+   "techniques": [
+    "ECLIA"
+   ],
+   "matched_terms": [
+    "immune"
+   ]
+  },
+  {
+   "accession": "OSD-752",
+   "title": "Effects of Space Flight on Inflammasome Activation in the Brain of Mice (Hippocampus; ECLIA)",
+   "organism": "",
+   "techniques": [
+    "ECLIA"
+   ],
+   "matched_terms": [
+    "immune"
+   ]
+  },
+  {
+   "accession": "OSD-776",
+   "title": "The impact of deep space radiation on cognitive performance: From biological sex to biomarkers to countermeasures (Flow Cytometry, Blood)",
+   "organism": "",
+   "techniques": [
+    "Flow Cytometry"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-777",
+   "title": "The impact of deep space radiation on cognitive performance: From biological sex to biomarkers to countermeasures  (Flow Cytometry, Microglia)",
+   "organism": "",
+   "techniques": [
+    "Flow Cytometry"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-778",
+   "title": "The impact of deep space radiation on cognitive performance: From biological sex to biomarkers to countermeasures (Flow Cytometry, Synapse from Hippocampus)",
+   "organism": "",
+   "techniques": [
+    "Flow Cytometry"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-804",
+   "title": "37-Day microgravity exposure in 16-Week female C57BL/6J mice during the NASA Rodent Research 1 mission is associated with bone loss specific to weight-bearing skeletal sites (femur and vertebrae, micro computed tomography)",
+   "organism": "",
+   "techniques": [
+    "Micro-Computed Tomography"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-835",
+   "title": "Effects of 5-Ion Beam Irradiation and Hindlimb Unloading on Metabolic Pathways in Plasma and Brain of Behaviorally Tested WAG/Rij Rats",
+   "organism": "",
+   "techniques": [
+    "Open Field",
+    "Novel Object Recognition",
+    "Forced Swim Test"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-836",
+   "title": "Effects of photon irradiation in the presence and absence of hindlimb unloading on the behavioral performance and metabolic pathways in the plasma of Fischer rats",
+   "organism": "",
+   "techniques": [
+    "Open Field",
+    "Novel Object Recognition",
+    "Elevated Plus Maze",
+    "Anhedonia"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-837",
+   "title": "Effects of 5-ion 6-beam sequential irradiation in the presence and absence of hindlimb or control hindlimb unloading on behavioral performances and plasma metabolic pathways of Fischer 344 rats",
+   "organism": "",
+   "techniques": [
+    "Open Field",
+    "Novel Object Recognition"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-896",
+   "title": "Deficits in Sustained Attention and Changes in Dopaminergic Protein Levels following Exposure to Proton Radiation Are Related to Basal Dopaminergic Function (Western Blot, Frontal Cortex)",
+   "organism": "",
+   "techniques": [
+    "Western Blot",
+    "Western Blot",
+    "Western Blot",
+    "Western Blot"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-897",
+   "title": "Deficits in Sustained Attention and Changes in Dopaminergic Protein Levels following Exposure to Proton Radiation Are Related to Basal Dopaminergic Function (Western Blot, Parietal Cortex)",
+   "organism": "",
+   "techniques": [
+    "Western Blot",
+    "Western Blot"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-939",
+   "title": "Deficits in Sustained Attention and Changes in Dopaminergic Protein Levels following Exposure to Proton Radiation Are Related to Basal Dopaminergic Function (Rodent Psychomotor Vigilance Test)",
+   "organism": "",
+   "techniques": [
+    "Psychomotor Vigilance Test"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-952",
+   "title": "Automated behavioral segmentation and markerless pose tracking of mice during spaceflight",
+   "organism": "",
+   "techniques": [
+    "Pose Estimation",
+    "Behavioral Segmentation"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-964",
+   "title": "BioSentinel: Validating Sensitivity of Yeast Biosensors to Deep Space Relevant Radiation",
+   "organism": "",
+   "techniques": [
+    "alamarBlue",
+    "alamarBlue"
+   ],
+   "matched_terms": [
+    "radiation"
+   ]
+  },
+  {
+   "accession": "OSD-977",
+   "title": "Effects of spaceflight on cancellous and cortical bone in proximal femur in growing rats.",
+   "organism": "",
+   "techniques": [
+    "Micro-Computed Tomography"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-979",
+   "title": "Small changes in thermoregulation influence cancellous bone turnover balance in distal femur metaphysis in growing female mice.",
+   "organism": "",
+   "techniques": [
+    "Micro-Computed Tomography",
+    "Dual-Energy X-Ray Absorptiometry"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-980",
+   "title": "Cold stress during room temperature housing alters skeletal response to simulated microgravity (hindlimb unloading) in growing female C57BL6 mice.",
+   "organism": "",
+   "techniques": [
+    "Micro-Computed Tomography"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  },
+  {
+   "accession": "OSD-981",
+   "title": "Bone Marrow Adipose Tissue Is Not Required for Reconstitution of the Immune System Following Irradiation in Male Mice.",
+   "organism": "",
+   "techniques": [
+    "Dual-Energy X-Ray Absorptiometry",
+    "Histomorphometry",
+    "Micro-Computed Tomography"
+   ],
+   "matched_terms": [
+    "bone loss"
+   ]
+  }
+ ]
+}
