@@ -57,3 +57,7 @@ L3 (user, verbatim, decisions): «eso de ac dc es de otro tema no es relevante p
 L4 (evidence, verified 2026-11-14 from this machine): DONKI SEP returns real events — 27 in 2024-05-01..2024-06-30 (the May 2024 storm series), 13 in 2025-01-01..2025-03-01, 11 in 2026-08-06..2026-10-04. OSDR returns 54 studies for "bone loss" (19 ALSDA with DXA/micro-CT/histomorphometry). NTRS search API returns results. PDS MSL RAD index exceeded a 30 s timeout and is treated as unavailable.
 
 L5 (user, verbatim): «si esta bien es para que lo miren los demas del equipo somos 5 integrantes». Audience: the project overview is for the five-person team to review together.
+
+L6 (delivery record): The plain-language overview was published as documentation-only commit `80a9cc1` (751 diff lines) to `main` and `feature/aegis`. This is the documentation slice boundary; keep the dashboard and 3D worker changes out of this publication.
+
+L7 (user, verbatim): «no veo la architectura visual del sistema y tampoco la logina hay demaciado texto inecesario». Direction: make the system architecture and per-scenario logic the dominant visual content; remove explanatory prose that is not needed to understand either diagram.

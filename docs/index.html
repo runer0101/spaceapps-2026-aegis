@@ -1,223 +1,164 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Qué construye AEGIS, cómo se simulan escenarios de salud para una misión a Marte y qué datos son reales o simulados." />
-    <title>AEGIS · Qué vamos a construir</title>
-    <style>
-      :root {
-        color-scheme: dark;
-        --bg: #080b10;
-        --panel: #101720;
-        --panel-hi: #151f2a;
-        --line: #283542;
-        --text: #edf3f8;
-        --muted: #a6b4c1;
-        --blue: #69c4ff;
-        --green: #59dfaa;
-        --amber: #ffc16b;
-        --red: #ff7777;
-        --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
-        --mono: ui-monospace, "SF Mono", Menlo, monospace;
-      }
-      * { box-sizing: border-box; }
-      html { scroll-behavior: smooth; }
-      body {
-        margin: 0;
-        background: var(--bg);
-        color: var(--text);
-        font: 16px/1.65 var(--sans);
-      }
-      a { color: var(--blue); text-underline-offset: 3px; }
-      .page { width: min(100% - 36px, 1040px); margin: 0 auto; padding: 42px 0 64px; }
-      .eyebrow { color: var(--blue); font: 700 .72rem/1.4 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
-      h1 { max-width: 800px; margin: 12px 0; font-size: clamp(2.1rem, 6vw, 4rem); line-height: 1.08; letter-spacing: -.045em; }
-      h2 { margin: 0 0 14px; font-size: clamp(1.35rem, 3vw, 1.8rem); line-height: 1.2; letter-spacing: -.02em; }
-      h3 { margin: 0 0 8px; font-size: 1.02rem; line-height: 1.3; }
-      p { margin: 0 0 12px; }
-      .intro { max-width: 760px; color: var(--muted); font-size: 1.1rem; }
-      .intro strong { color: var(--text); }
-      .hero { padding: 0 0 26px; border-bottom: 1px solid var(--line); }
-      .summary {
-        margin-top: 24px; padding: 20px 22px; border: 1px solid #31506a; border-radius: 14px;
-        background: linear-gradient(120deg, #122331, var(--panel) 75%);
-      }
-      .summary strong { color: var(--blue); }
-      .summary p:last-child { margin-bottom: 0; }
-      .quick { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
-      .tag { border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; color: var(--muted); font: .76rem var(--mono); }
-      section { margin-top: 44px; scroll-margin-top: 18px; }
-      .section-lede { max-width: 760px; color: var(--muted); }
-      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-      .card { min-width: 0; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
-      .card p:last-child { margin-bottom: 0; }
-      .card p, .card li { color: var(--muted); }
-      .number { display: grid; place-items: center; width: 28px; height: 28px; margin-bottom: 10px; border: 1px solid #39617f; border-radius: 50%; color: var(--blue); font: .8rem var(--mono); }
-      .example { border-left: 3px solid var(--amber); background: #171811; }
-      .example h3 { color: var(--amber); }
-      .flow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px; margin-top: 20px; }
-      .flow-step { position: relative; padding: 16px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
-      .flow-step:not(:last-child)::after { content: "→"; position: absolute; top: 42%; right: -19px; color: var(--blue); font: 1rem var(--mono); }
-      .flow-step b { display: block; margin: 4px 0; }
-      .flow-step span { display: block; color: var(--muted); font-size: .87rem; }
-      .flow-step .number { margin-bottom: 8px; }
-      .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
-      .legend .card { padding: 16px; }
-      .label { display: inline-block; margin-bottom: 8px; padding: 3px 8px; border-radius: 999px; font: .72rem var(--mono); }
-      .real { color: var(--green); border: 1px solid #326a55; }
-      .sim { color: var(--amber); border: 1px solid #705c35; }
-      .list { margin: 8px 0 0; padding-left: 20px; }
-      .list li { margin: 5px 0; }
-      .scenario-list { display: grid; gap: 10px; margin-top: 16px; }
-      .scenario { display: grid; grid-template-columns: 190px 1fr; gap: 16px; align-items: start; padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
-      .scenario b { color: var(--blue); }
-      .scenario p { margin: 0; color: var(--muted); }
-      .warning { margin-top: 16px; padding: 16px 18px; border: 1px solid #66532f; border-radius: 12px; background: #17150f; color: var(--muted); }
-      .warning strong { color: var(--amber); }
-      .status { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-      .status h3 { display: flex; align-items: center; gap: 8px; }
-      .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green); }
-      .dot.plan { background: var(--amber); }
-      .source-list { display: grid; gap: 9px; }
-      .source-list a { display: block; font-weight: 600; }
-      .source-list span { display: block; color: var(--muted); font-size: .9rem; }
-      .not { color: var(--red); }
-      footer { margin-top: 46px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
-      @media (max-width: 760px) {
-        .flow { grid-template-columns: 1fr; gap: 10px; }
-        .flow-step:not(:last-child)::after { content: "↓"; top: auto; bottom: -19px; right: 50%; z-index: 1; }
-        .grid, .legend, .status { grid-template-columns: 1fr; }
-        .scenario { grid-template-columns: 1fr; gap: 4px; }
-        .page { width: min(100% - 26px, 1040px); padding-top: 28px; }
-      }
-    </style>
-  </head>
-  <body>
-    <main class="page">
-      <header class="hero">
-        <div class="eyebrow">NASA Space Apps Challenge · Health Monitoring Software</div>
-        <h1>AEGIS: cuidar la salud de la tripulación durante un viaje a Marte</h1>
-        <p class="intro">
-          <strong>AEGIS será un simulador interactivo.</strong> El equipo elige una situación espacial y observa
-          cómo podría cambiar la salud de una tripulación a lo largo de la misión. Una escena 3D muestra la nave
-          y los astronautas; un panel explica los cambios y señala sus fuentes.
-        </p>
-        <div class="summary">
-          <p><strong>En una frase:</strong> elegimos un escenario —por ejemplo, una tormenta solar— y AEGIS muestra
-            qué indicadores de salud podrían verse afectados, cómo evolucionan y por qué aparece una alerta.</p>
-          <p>No es una nave real, no recibe señales de astronautas reales y no diagnostica ni recomienda tratamientos.
-            Es una demostración educativa basada en datos históricos y modelos simplificados.</p>
-        </div>
-        <div class="quick" aria-label="Resumen del proyecto">
-          <span class="tag">varios escenarios</span>
-          <span class="tag">tripulación simulada</span>
-          <span class="tag">visualización 3D</span>
-          <span class="tag">datos NASA citados</span>
-          <span class="tag">sin hardware requerido</span>
-          <span class="tag">para revisar entre 5 integrantes</span>
-        </div>
-      </header>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Diagrama visual de la arquitectura y lógica de AEGIS, un simulador de salud de tripulación para misiones a Marte." />
+  <title>AEGIS · Arquitectura y lógica</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080c12;
+      --panel: #111923;
+      --panel2: #172331;
+      --line: #2c3b4a;
+      --text: #edf5fb;
+      --muted: #a9bac8;
+      --blue: #70c7ff;
+      --green: #63dfad;
+      --amber: #ffca76;
+      --purple: #c5a4ff;
+      --mono: ui-monospace, "SF Mono", Menlo, monospace;
+      --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--sans); }
+    .page { width: min(1120px, calc(100% - 36px)); margin: auto; padding: 42px 0 56px; }
+    header { margin-bottom: 32px; }
+    .eyebrow { color: var(--blue); font: 700 .75rem var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: 8px 0; font-size: clamp(2rem, 5vw, 3.3rem); line-height: 1.1; letter-spacing: -.04em; }
+    .subtitle { color: var(--muted); margin: 0; font-size: 1.05rem; }
+    h2 { margin: 0 0 16px; font-size: clamp(1.25rem, 3vw, 1.7rem); line-height: 1.2; }
+    h3 { margin: 0 0 5px; font-size: 1rem; }
+    section { margin-top: 38px; }
+    .diagram-shell { padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: #0d141d; }
+    .arch-grid { display: grid; grid-template-columns: minmax(150px, 1.05fr) 34px minmax(160px, 1.15fr) 34px minmax(150px, 1fr) 34px minmax(185px, 1.25fr); align-items: center; gap: 7px; }
+    .stack { display: grid; gap: 12px; }
+    .node { min-width: 0; padding: 15px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+    .node.real { border-color: #32765d; }
+    .node.core { border: 2px solid #378abd; background: #102130; }
+    .node.output { border-color: #33516b; }
+    .node.ai { border-style: dashed; border-color: #755da0; }
+    .node small { display: block; margin-bottom: 5px; color: var(--muted); font: .68rem var(--mono); letter-spacing: .04em; text-transform: uppercase; }
+    .node p { margin: 0; color: var(--muted); font-size: .85rem; line-height: 1.4; }
+    .node h3 { color: var(--text); }
+    .node.real small { color: var(--green); }
+    .node.core small { color: var(--blue); }
+    .node.ai small { color: var(--purple); }
+    .arrow { color: var(--blue); text-align: center; font: 2rem/1 var(--mono); }
+    .connector-label { grid-column: 1 / -1; color: var(--muted); text-align: center; font-size: .82rem; }
+    .optional { margin-top: 14px; padding: 10px 13px; border: 1px dashed #526477; border-radius: 10px; color: var(--muted); text-align: center; font-size: .84rem; }
+    .optional b { color: var(--text); }
+    .key { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 14px; color: var(--muted); font-size: .82rem; }
+    .key span { display: inline-flex; align-items: center; gap: 7px; }
+    .swatch { width: 9px; height: 9px; border-radius: 50%; background: var(--green); }
+    .swatch.model { background: var(--amber); }
+    .swatch.plan { background: var(--purple); }
+    .logic { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: stretch; gap: 22px; }
+    .logic-step { position: relative; min-height: 146px; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+    .logic-step:not(:last-child)::after { content: "→"; position: absolute; top: 47px; right: -21px; color: var(--blue); font: 1.5rem var(--mono); }
+    .num { display: grid; place-items: center; width: 28px; height: 28px; margin-bottom: 11px; border: 1px solid #3979a0; border-radius: 50%; color: var(--blue); font: .8rem var(--mono); }
+    .logic-step p { margin: 0; color: var(--muted); font-size: .88rem; }
+    .example { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 16px; margin-top: 16px; padding: 16px 18px; border: 1px solid #80663c; border-radius: 12px; background: #1b1811; }
+    .date { color: var(--amber); font: 700 1rem var(--mono); white-space: nowrap; }
+    .example p { margin: 0; color: var(--muted); }
+    .facts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .fact { padding: 15px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+    .fact b { display: block; margin-bottom: 4px; }
+    .fact span { color: var(--muted); font-size: .86rem; }
+    .scenarios { display: flex; flex-wrap: wrap; gap: 9px; }
+    .scenario { padding: 8px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel); font-size: .88rem; }
+    .scenario b { color: var(--blue); }
+    footer { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: .83rem; }
+    footer a { color: var(--blue); }
+    @media (max-width: 900px) {
+      .arch-grid { grid-template-columns: 1fr; gap: 8px; }
+      .arrow { transform: rotate(90deg); padding: 3px; }
+      .logic { grid-template-columns: 1fr; gap: 10px; }
+      .logic-step { min-height: 0; }
+      .logic-step:not(:last-child)::after { content: "↓"; top: auto; right: 50%; bottom: -18px; z-index: 1; }
+    }
+    @media (max-width: 600px) {
+      .page { width: min(100% - 24px, 1120px); padding-top: 28px; }
+      .diagram-shell { padding: 13px; }
+      .facts { grid-template-columns: 1fr; }
+      .example { grid-template-columns: 1fr; gap: 5px; }
+      .date { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="eyebrow">AEGIS · proyecto del equipo de 5</div>
+      <h1>Simular la salud de una tripulación rumbo a Marte</h1>
+      <p class="subtitle">Dos diagramas: qué piezas forman el sistema y qué ocurre en cada día simulado.</p>
+    </header>
 
-      <section id="experiencia">
-        <h2>¿Qué verá la persona que use la demo?</h2>
-        <p class="section-lede">La pantalla reúne el escenario y la información de salud. La persona puede seguir la misión día a día y entender de dónde viene cada alerta.</p>
-        <div class="grid">
-          <article class="card"><div class="number">1</div><h3>La misión en 3D</h3><p>Una nave, Marte y una tripulación simulada. La escena cambia según la etapa del viaje y resalta visualmente si el escenario presenta un riesgo.</p></article>
-          <article class="card"><div class="number">2</div><h3>Indicadores de salud</h3><p>Tarjetas y gráficas muestran radiación acumulada, sueño, hueso, músculo y capacidad aeróbica. Frecuencia cardíaca y oxígeno aparecen como datos ilustrativos, sin umbrales médicos.</p></article>
-          <article class="card"><div class="number">3</div><h3>Alertas con explicación</h3><p>Si se supera un umbral del modelo, la alerta muestra el valor, el motivo y la fuente. La pantalla distingue una señal del escenario de un problema médico real.</p></article>
-          <article class="card"><div class="number">4</div><h3>Ayuda para entender la evidencia</h3><p>La propuesta incluye un módulo que resumirá la alerta en lenguaje sencillo y enlazará estudios de NASA. No inventará estudios ni dará diagnósticos; ese módulo aún no está implementado.</p></article>
+    <section aria-labelledby="architecture-title">
+      <h2 id="architecture-title">1. Arquitectura del sistema</h2>
+      <div class="diagram-shell">
+        <div class="arch-grid" role="img" aria-label="Los datos históricos y el escenario elegido alimentan el simulador; este transmite las actualizaciones al panel, la escena 3D y al módulo explicador planeado.">
+          <div class="stack">
+            <article class="node real"><small>Datos reales · NASA</small><h3>Eventos solares</h3><p>Fechas e intensidad registradas por DONKI.</p></article>
+            <article class="node real"><small>Investigación · NASA</small><h3>Estudios de salud</h3><p>OSDR y fuentes publicadas.</p></article>
+            <article class="node"><small>El equipo elige</small><h3>Escenario</h3><p>Tormenta, viaje completo o control tranquilo.</p></article>
+          </div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <article class="node"><small>Preparación</small><h3>Muestra de datos</h3><p>Una copia pequeña permite ejecutar la demo sin conexión a NASA.</p></article>
+          <div class="arrow" aria-hidden="true">→</div>
+          <article class="node core"><small>Motor del simulador</small><h3>Un día de misión</h3><p>Combina fecha, escenario y tripulación ficticia. Calcula indicadores y alertas.</p></article>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="stack">
+            <article class="node output"><small>Lo que ve el equipo</small><h3>Panel de salud</h3><p>Gráficas e indicadores.</p></article>
+            <article class="node output"><small>Lo que ve el equipo</small><h3>Escena 3D</h3><p>Nave, Marte y astronautas.</p></article>
+            <article class="node ai"><small>Planeado · no implementado</small><h3>Explicador</h3><p>Resume alertas con sus fuentes; no diagnostica.</p></article>
+          </div>
         </div>
-      </section>
-
-      <section id="ejemplo">
-        <h2>Un ejemplo de principio a fin</h2>
-        <article class="card example">
-          <h3>Escenario: tormenta solar durante el viaje a Marte</h3>
-          <p>Seleccionamos el escenario histórico de mayo de 2024. AEGIS encuentra eventos solares reales de NASA DONKI en esas fechas y los coloca en el calendario simulado. En el día de uno de esos eventos, el panel lo destaca; la gráfica muestra cómo cambian los indicadores del modelo y la tripulación aparece resaltada en la escena 3D. La alerta explica que se trata de actividad solar y enlaza la evidencia disponible.</p>
-          <p><strong>Importante:</strong> el dato de DONKI es una medición de partículas, no una dosis exacta recibida por una persona. AEGIS no puede calcular esa dosis sólo con ese dato; la respuesta del modelo es una aproximación declarada, no una predicción.</p>
-        </article>
-      </section>
-
-      <section id="recorrido">
-        <h2>¿Cómo trabaja el sistema?</h2>
-        <p class="section-lede">Piense en cada día de misión como una ficha. El simulador crea la ficha y las pantallas la convierten en información fácil de seguir.</p>
-        <div class="flow" aria-label="Flujo de información del sistema">
-          <div class="flow-step"><div class="number">1</div><b>Datos de NASA</b><span>Eventos solares e investigaciones publicadas.</span></div>
-          <div class="flow-step"><div class="number">2</div><b>Elegir escenario</b><span>Tormenta, viaje largo, día tranquilo o evento de prueba.</span></div>
-          <div class="flow-step"><div class="number">3</div><b>Simular un día</b><span>El modelo actualiza entorno e indicadores de la tripulación ficticia.</span></div>
-          <div class="flow-step"><div class="number">4</div><b>Explicar alertas</b><span>Se compara con límites citados y se muestra la causa.</span></div>
-          <div class="flow-step"><div class="number">5</div><b>Verlo y explorarlo</b><span>Panel, gráficas, escena 3D y evidencia relacionada.</span></div>
+        <div class="optional"><b>Telemetría:</b> las pantallas reciben la misma actualización simulada. MQTT y sensores físicos son opcionales, no necesarios para la demo.</div>
+        <div class="key" aria-label="Leyenda">
+          <span><i class="swatch"></i> Datos públicos reales</span>
+          <span><i class="swatch model"></i> Valores calculados por el modelo</span>
+          <span><i class="swatch plan"></i> Módulo futuro</span>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section id="realidad">
-        <h2>¿Qué es real y qué es simulado?</h2>
-        <p class="section-lede">Esta distinción es esencial: el proyecto usa observaciones reales como contexto, pero no tiene datos privados de astronautas.</p>
-        <div class="legend">
-          <article class="card"><span class="label real">DATOS REALES</span><h3>Lo que viene de fuentes públicas</h3><ul class="list"><li>Fechas e identificadores de eventos de partículas solares registrados por NASA DONKI.</li><li>Fichas de investigaciones de biología espacial de NASA OSDR.</li><li>Normas y estudios publicados que sirven de referencia para algunos valores.</li></ul></article>
-          <article class="card"><span class="label sim">SIMULACIÓN</span><h3>Lo que crea el modelo</h3><ul class="list"><li>Los cuatro astronautas y sus lecturas diarias; no son personas reales.</li><li>La evolución del sueño, hueso, músculo y capacidad aeróbica durante la misión.</li><li>El índice de estrés y la respuesta simplificada a eventos solares.</li><li>La animación de la nave, Marte y las alertas.</li></ul></article>
-        </div>
-        <div class="warning"><strong>Límite científico:</strong> la conversión de actividad solar a dosis personal requiere conocer el espectro de partículas y el blindaje de la nave. El prototipo no tiene esos datos completos. Por eso no presentamos la dosis de un evento como una medición real; mostramos la simplificación y su fuente junto al resultado.</div>
-      </section>
+    <section aria-labelledby="logic-title">
+      <h2 id="logic-title">2. Lógica de cada escenario</h2>
+      <div class="logic">
+        <article class="logic-step"><div class="num">1</div><h3>Elegir misión y día</h3><p>Por ejemplo: día 24 de un viaje simulado.</p></article>
+        <article class="logic-step"><div class="num">2</div><h3>Buscar evento solar</h3><p>Se consulta la muestra NASA para esa fecha.</p></article>
+        <article class="logic-step"><div class="num">3</div><h3>Actualizar tripulación</h3><p>El modelo calcula radiación, sueño y cambios físicos simulados.</p></article>
+        <article class="logic-step"><div class="num">4</div><h3>Revisar alertas</h3><p>Compara los valores con referencias y añade la fuente.</p></article>
+        <article class="logic-step"><div class="num">5</div><h3>Mostrar resultado</h3><p>La misma actualización aparece en gráficas y en 3D.</p></article>
+      </div>
+      <div class="example">
+        <div class="date">9 MAY 2024 · EVENTO REAL</div>
+        <p>El escenario de tormenta encuentra actividad solar registrada ese día. AEGIS la destaca y muestra cómo responde su tripulación simulada.</p>
+      </div>
+    </section>
 
-      <section id="escenarios">
-        <h2>Situaciones que queremos demostrar</h2>
-        <div class="scenario-list">
-          <article class="scenario"><b>Tormenta solar<br />90 días</b><p>Una ventana histórica alrededor de mayo de 2024. Sirve para ver cómo el sistema señala actividad solar registrada de verdad.</p></article>
-          <article class="scenario"><b>Viaje completo<br />900 días</b><p>Un ejemplo de misión con salida, estancia en Marte y regreso. Permite observar tendencias acumuladas; no es un pronóstico de una misión real.</p></article>
-          <article class="scenario"><b>Viaje tranquilo<br />30 días</b><p>Escenario de control: ayuda a comprobar qué muestra el sistema cuando no hay eventos solares destacados.</p></article>
-          <article class="scenario"><b>Evento de referencia<br />12 días</b><p>Prueba controlada que usa el límite de diseño de NASA para verificar que la alerta aguda funciona. No representa una observación real de DONKI.</p></article>
-        </div>
-      </section>
+    <section aria-labelledby="scope-title">
+      <h2 id="scope-title">Qué representa la demo</h2>
+      <div class="facts">
+        <article class="fact"><b>Real</b><span>Fechas de eventos solares y referencias de estudios.</span></article>
+        <article class="fact"><b>Simulado</b><span>Astronautas, lecturas y evolución de salud. No hay datos personales ni sensores reales.</span></article>
+        <article class="fact"><b>Límite</b><span>La dosis solar es aproximada; no es una predicción ni consejo médico.</span></article>
+      </div>
+    </section>
 
-      <section id="piezas">
-        <h2>¿Qué piezas vamos a construir?</h2>
-        <div class="grid">
-          <article class="card"><h3>1. Preparación de datos</h3><p>Descarga una muestra pequeña de datos NASA y la guarda para que la demo pueda abrirse sin depender de una conexión activa a esos servicios.</p></article>
-          <article class="card"><h3>2. Simulador</h3><p>Combina el escenario elegido, el calendario y las reglas del modelo. Produce una ficha por día con el estado del entorno y de cada astronauta simulado.</p></article>
-          <article class="card"><h3>3. Servidor de la demo</h3><p>Entrega al navegador los escenarios y las fichas día a día. Es un canal de telemetría simulado; no se conecta a sensores reales.</p></article>
-          <article class="card"><h3>4. Pantalla y escena 3D</h3><p>La pantalla escucha las fichas y actualiza el panel, las gráficas, las alertas y la nave. Todos muestran los mismos datos para no contradecirse.</p></article>
-        </div>
-        <div class="summary">
-          <p><strong>MQTT y sensores físicos:</strong> en el dibujo original aparecía una conexión MQTT. La dejamos como una posible extensión; el alcance actual funciona con telemetría simulada y no requiere ESP32, sensores, broker ni Wi-Fi del evento.</p>
-          <p><strong>Fuera del proyecto:</strong> AC/DC, 220 V, circuitos eléctricos y Rust. Usted indicó que esas partes pertenecían a otro tema.</p>
-        </div>
-      </section>
+    <section aria-labelledby="scenarios-title">
+      <h2 id="scenarios-title">Escenarios incluidos</h2>
+      <div class="scenarios">
+        <span class="scenario"><b>Tormenta solar</b> · 90 días</span>
+        <span class="scenario"><b>Viaje a Marte</b> · 900 días</span>
+        <span class="scenario"><b>Viaje tranquilo</b> · control</span>
+        <span class="scenario"><b>Evento límite</b> · prueba de alerta</span>
+      </div>
+    </section>
 
-      <section id="revision">
-        <h2>Para revisar entre los cinco integrantes</h2>
-        <p class="section-lede">Esta página presenta el plan del proyecto. Antes de cerrar la demo, el equipo puede acordar estos tres puntos juntos:</p>
-        <div class="grid">
-          <article class="card"><h3>Escenarios</h3><p>¿La tormenta solar durante el viaje a Marte debe ser el ejemplo principal?</p></article>
-          <article class="card"><h3>Información de salud</h3><p>¿Radiación, sueño, hueso, músculo y capacidad aeróbica explican bien lo que queremos mostrar?</p></article>
-          <article class="card"><h3>Experiencia visual</h3><p>¿La nave y la tripulación en 3D, junto con las gráficas y alertas, cuentan la historia con claridad?</p></article>
-          <article class="card"><h3>Alcance</h3><p>¿Confirmamos que la demo funcionará con tripulación simulada y sin depender de hardware físico?</p></article>
-        </div>
-      </section>
-
-      <section id="estado">
-        <h2>Estado actual del trabajo</h2>
-        <div class="status">
-          <article class="card"><h3><span class="dot"></span>Base construida</h3><p>Descarga y muestra de datos NASA, simulador, servidor y pruebas automáticas. Hay cuatro escenarios definidos.</p></article>
-          <article class="card"><h3><span class="dot plan"></span>Interfaz en construcción</h3><p>El panel visual y la escena 3D son los siguientes módulos. La asistencia en lenguaje sencillo está planteada, pero aún no está implementada.</p></article>
-        </div>
-      </section>
-
-      <section id="fuentes">
-        <h2>Fuentes principales</h2>
-        <div class="card source-list">
-          <div><a href="https://ccmc.gsfc.nasa.gov/tools/DONKI/" target="_blank" rel="noreferrer">NASA DONKI · eventos de clima espacial</a><span>Fuente de las fechas e identificadores de eventos solares del escenario histórico.</span></div>
-          <div><a href="https://osdr.nasa.gov/" target="_blank" rel="noreferrer">NASA Open Science Data Repository (OSDR)</a><span>Catálogo abierto de estudios de biología espacial; los registros no son historiales médicos de astronautas.</span></div>
-          <div><a href="https://standards.nasa.gov/sites/default/files/standards/NASA/C/nasa-std-3001-vol-1-rev-c-signature.pdf" target="_blank" rel="noreferrer">NASA-STD-3001, Volumen 1, Revisión C</a><span>Estándar NASA de salud humana en vuelos espaciales. Incluye los límites de dosis citados por el prototipo.</span></div>
-          <div><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4188436/" target="_blank" rel="noreferrer">Barger et al. · sueño de tripulaciones en vuelo espacial</a><span>Estudio publicado sobre sueño en tripulaciones Shuttle y de la Estación Espacial Internacional.</span></div>
-        </div>
-      </section>
-
-      <footer>
-        <strong>AEGIS</strong> · propuesta para revisión del equipo de cinco integrantes · simulación educativa, no herramienta médica.
-        <br />Código y datos de muestra: <a href="https://github.com/runer0101/spaceapps-2026-aegis" target="_blank" rel="noreferrer">repositorio público del proyecto</a>.
-      </footer>
-    </main>
-  </body>
+    <footer>AEGIS · página breve para revisión del equipo de cinco · <a href="https://github.com/runer0101/spaceapps-2026-aegis">repositorio del proyecto</a></footer>
+  </main>
+</body>
 </html>
