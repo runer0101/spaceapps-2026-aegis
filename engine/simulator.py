@@ -15,6 +15,22 @@ def phase_for(scenario, day):
 
 def build_alerts(crew_frames, environment, phase):
     alerts = []
+    if environment["dose_rate_msv_day"] >= C.ACUTE_EVENT_LIMIT_MSV:
+        alerts.append(
+            {
+                "indicator": "acute_event_msv",
+                "severity": "critical",
+                "crew": "crew",
+                "value": environment["dose_rate_msv_day"],
+                "threshold": C.ACUTE_EVENT_LIMIT_MSV,
+                "message": (
+                    f"Acute dose today {environment['dose_rate_msv_day']:.0f} mSv exceeds "
+                    f"the {C.ACUTE_EVENT_LIMIT_MSV:.0f} mSv design-reference event limit."
+                ),
+                "source": C.ACUTE_EVENT_SOURCE,
+            }
+        )
+
     worst = max(crew_frames, key=lambda member: member["dose_msv"])
     if worst["dose_msv"] >= C.CAREER_LIMIT_MSV:
         alerts.append(
@@ -104,7 +120,11 @@ def simulate(scenario_id, days=None, seed=7):
     for day in range(total_days):
         phase = phase_for(scenario, day)
         environment = radiation_model.environment(
-            day, scenario["epoch"], phase, scenario["shield_g_cm2"]
+            day,
+            scenario["epoch"],
+            phase,
+            scenario["shield_g_cm2"],
+            forced_msv=scenario.get("forced_events", {}).get(day, 0.0),
         )
         crew_frames = [member.step(phase, environment) for member in crew]
         alerts = build_alerts(crew_frames, environment, phase)

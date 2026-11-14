@@ -115,7 +115,11 @@ class Handler(BaseHTTPRequestHandler):
             {
                 "indicator": indicator,
                 "term": term,
-                "studies": studies[:3],
+                # A study whose title names the topic is better evidence than one
+                # that merely matched a search term, so it is shown first.
+                "studies": sorted(
+                    studies, key=lambda s: 0 if term in s["title"].lower() else 1
+                )[:3],
                 "source": "NASA Open Science Data Repository (ALSDA)",
             }
         )

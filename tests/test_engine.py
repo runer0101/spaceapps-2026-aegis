@@ -96,6 +96,31 @@ class RadiationTest(unittest.TestCase):
         surface = [f["environment"]["gcr_msv_day"] for f in long_run if f["phase"] == "surface"]
         self.assertTrue(surface and transit)
         self.assertLess(max(surface), min(transit))
+    def test_records_from_the_same_day_do_not_multiply_the_dose(self):
+        """DONKI files one row per instrument; dose is per event day, not per row."""
+        frames = simulator.simulate("mars_full_transit", days=900)
+        storm = [f for f in frames if f["environment"]["sep_active"]]
+        single = [f for f in storm if f["environment"]["sep_flux_pfu"] == 100]
+        multi = [f for f in storm if f["environment"]["sep_flux_pfu"] >= 300]
+        self.assertTrue(single, "no single-record storm day in the sample")
+        self.assertTrue(multi, "no multi-record storm day in the sample")
+        self.assertAlmostEqual(
+            single[0]["crew"][0]["dose_rate_msv_day"],
+            multi[0]["crew"][0]["dose_rate_msv_day"],
+            places=6,
+        )
+
+    def test_full_mission_stays_near_the_published_estimate(self):
+        """NASA puts a Mars round trip near 1.0 Sv; the model must not drift far."""
+        frames = simulator.simulate("mars_full_transit", days=900)
+        total = frames[-1]["crew"][0]["dose_msv"]
+        self.assertTrue(950 <= total <= 1200, total)
+
+    def test_aerobic_capacity_does_not_exceed_its_cap(self):
+        frames = simulator.simulate("mars_full_transit", days=900)
+        aerobic = frames[-1]["crew"][0]["aerobic_pct"]
+        self.assertGreaterEqual(aerobic, -25.0)
+        self.assertLess(aerobic, 0.0)
 
 
 class AlertTest(unittest.TestCase):
@@ -109,6 +134,19 @@ class AlertTest(unittest.TestCase):
         ]
         self.assertTrue(radiation_alerts, "900 days never crossed the career limit")
         self.assertTrue(all("NASA-STD-3001" in alert["source"] for alert in radiation_alerts))
+
+    def test_design_reference_event_raises_an_acute_alert(self):
+        frames = simulator.simulate("design_reference_spe", days=12)
+        acute = [
+            alert
+            for frame in frames
+            for alert in frame["alerts"]
+            if alert["indicator"] == "acute_event_msv"
+        ]
+        self.assertTrue(acute, "a 250 mSv event day must raise the acute alert")
+        self.assertTrue(all(a["severity"] == "critical" for a in acute))
+        self.assertTrue(all("250" in a["message"] for a in acute))
+        self.assertTrue(all("4.8.3" in a["source"] for a in acute))
 
     def test_quiet_cruise_raises_no_critical_alert(self):
         frames = simulator.simulate("quiet_cruise", days=30)

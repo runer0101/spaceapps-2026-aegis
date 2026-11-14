@@ -39,6 +39,18 @@ SCENARIOS = {
         "shield_g_cm2": 20.0,
         "summary": "A control run: no storm expected, so the crew should stay nominal.",
     },
+    "design_reference_spe": {
+        "title": "Design-reference solar particle event",
+        "epoch": "2024-01-01",
+        "days": 12,
+        "phases": [(0, "transit_out")],
+        "shield_g_cm2": 20.0,
+        "forced_events": {5: 250.0},
+        "summary": (
+            "A worst-case single event at the NASA design-reference level, to show that "
+            "the acute limit fires when it should."
+        ),
+    },
 }
 
 

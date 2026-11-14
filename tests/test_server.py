@@ -42,7 +42,7 @@ class ServerTest(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertIn("application/json", content_type)
         payload = json.loads(body)
-        self.assertEqual(len(payload["scenarios"]), 3)
+        self.assertEqual(len(payload["scenarios"]), 4)
         self.assertEqual(payload["default"], "mars_storm_2024")
         for scenario in payload["scenarios"]:
             self.assertTrue(scenario["id"])
@@ -127,6 +127,11 @@ class EvidenceTest(unittest.TestCase):
         status, payload = self.get("/api/evidence?indicator=not_an_indicator")
         self.assertEqual(status, 200)
         self.assertEqual(payload["studies"], [])
+
+    def test_the_study_named_in_its_title_ranks_first(self):
+        """A judge will read the first citation, so it must actually be about the topic."""
+        _, payload = self.get("/api/evidence?indicator=bmd_pct")
+        self.assertIn("bone", payload["studies"][0]["title"].lower())
 
 
 if __name__ == "__main__":

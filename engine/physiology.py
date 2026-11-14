@@ -19,6 +19,7 @@ class CrewMember:
         self.bmd_pct = 0.0
         self.muscle_pct = 0.0
         self.dose_msv = 0.0
+        self.aerobic_pct = 0.0
         self.base_hr = 62.0 + self.rng.uniform(0.0, 12.0)
         self.sleep_debt_h = 0.0
 
@@ -30,6 +31,10 @@ class CrewMember:
             C.BMD_LOSS_PCT_MONTH / DAYS_PER_MONTH * gravity_factor
         )
         self.muscle_pct -= C.MUSCLE_LOSS_PCT_MONTH / DAYS_PER_MONTH * gravity_factor
+        self.aerobic_pct = max(
+            -C.AEROBIC_LOSS_CAP_PCT,
+            self.aerobic_pct - C.AEROBIC_LOSS_PCT_MONTH / DAYS_PER_MONTH * gravity_factor,
+        )
         self.dose_msv += environment["dose_rate_msv_day"]
 
         storm = environment["sep_active"]
@@ -58,6 +63,7 @@ class CrewMember:
             "stress_index": round(stress, 2),
             "bmd_pct": round(self.bmd_pct, 2),
             "muscle_pct": round(self.muscle_pct, 2),
+            "aerobic_pct": round(self.aerobic_pct, 1),
             "dose_msv": round(self.dose_msv, 1),
             "dose_rate_msv_day": round(environment["dose_rate_msv_day"], 2),
         }
