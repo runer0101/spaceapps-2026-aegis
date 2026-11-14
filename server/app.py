@@ -152,11 +152,19 @@ class Handler(BaseHTTPRequestHandler):
     def static(self, path):
         if path == "/":
             path = "/index.html"
-        for base in (WEB, ROOT / "docs"):
-            candidate = (base / path.lstrip("/")).resolve()
-            if str(candidate).startswith(str(base.resolve())) and candidate.is_file():
-                break
+        # On the published site the document is the root index. Locally the root
+        # is the dashboard, so the document keeps an explicit path of its own.
+        aliases = {"/architecture.html", "/architecture"}
+        candidate = None
+        if path in aliases:
+            candidate = ROOT / "docs" / "index.html"
         else:
+            for base in (WEB, ROOT / "docs"):
+                trial = (base / path.lstrip("/")).resolve()
+                if str(trial).startswith(str(base.resolve())) and trial.is_file():
+                    candidate = trial
+                    break
+        if candidate is None or not candidate.is_file():
             self.send_error(404, "not found")
             return
         body = candidate.read_bytes()

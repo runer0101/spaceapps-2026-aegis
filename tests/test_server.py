@@ -82,6 +82,13 @@ class ServerTest(unittest.TestCase):
         self.assertIn("text/html", content_type)
         self.assertIn(b"<html", body.lower())
 
+    def test_architecture_document_is_served_locally(self):
+        """Locally the root is the dashboard, so the document needs its own path."""
+        status, content_type, body = self.get("/architecture.html")
+        self.assertEqual(status, 200)
+        self.assertIn("text/html", content_type)
+        self.assertIn(b'id="logica"', body)
+
     def test_path_traversal_is_refused(self):
         with self.assertRaises(urllib.error.HTTPError) as caught:
             self.get("/../../etc/passwd")
