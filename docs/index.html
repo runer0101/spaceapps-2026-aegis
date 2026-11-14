@@ -3,610 +3,221 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AEGIS · Arquitectura y lógica del sistema</title>
+    <meta name="description" content="Qué construye AEGIS, cómo se simulan escenarios de salud para una misión a Marte y qué datos son reales o simulados." />
+    <title>AEGIS · Qué vamos a construir</title>
     <style>
       :root {
-        --bg: #07090d;
-        --panel: #0e1319;
-        --panel-2: #121922;
-        --line: #1e2833;
-        --ink: #e8eef5;
-        --ink-dim: #8b9aa8;
-        --accent: #4ea8de;
-        --ok: #3ddc97;
-        --warn: #ffb454;
-        --crit: #ff5d5d;
-        --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
-        --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        color-scheme: dark;
+        --bg: #080b10;
+        --panel: #101720;
+        --panel-hi: #151f2a;
+        --line: #283542;
+        --text: #edf3f8;
+        --muted: #a6b4c1;
+        --blue: #69c4ff;
+        --green: #59dfaa;
+        --amber: #ffc16b;
+        --red: #ff7777;
+        --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+        --mono: ui-monospace, "SF Mono", Menlo, monospace;
       }
-
       * { box-sizing: border-box; }
-
+      html { scroll-behavior: smooth; }
       body {
         margin: 0;
         background: var(--bg);
-        color: var(--ink);
-        font-family: var(--sans);
-        font-size: 15px;
-        line-height: 1.6;
+        color: var(--text);
+        font: 16px/1.65 var(--sans);
       }
-
-      .wrap { max-width: 1180px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
-
-      header.doc-head {
-        border-bottom: 1px solid var(--line);
-        padding-bottom: 1.5rem;
-        margin-bottom: 2.5rem;
+      a { color: var(--blue); text-underline-offset: 3px; }
+      .page { width: min(100% - 36px, 1040px); margin: 0 auto; padding: 42px 0 64px; }
+      .eyebrow { color: var(--blue); font: 700 .72rem/1.4 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+      h1 { max-width: 800px; margin: 12px 0; font-size: clamp(2.1rem, 6vw, 4rem); line-height: 1.08; letter-spacing: -.045em; }
+      h2 { margin: 0 0 14px; font-size: clamp(1.35rem, 3vw, 1.8rem); line-height: 1.2; letter-spacing: -.02em; }
+      h3 { margin: 0 0 8px; font-size: 1.02rem; line-height: 1.3; }
+      p { margin: 0 0 12px; }
+      .intro { max-width: 760px; color: var(--muted); font-size: 1.1rem; }
+      .intro strong { color: var(--text); }
+      .hero { padding: 0 0 26px; border-bottom: 1px solid var(--line); }
+      .summary {
+        margin-top: 24px; padding: 20px 22px; border: 1px solid #31506a; border-radius: 14px;
+        background: linear-gradient(120deg, #122331, var(--panel) 75%);
       }
-
-      .eyebrow {
-        font-family: var(--mono);
-        font-size: 0.7rem;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        color: var(--accent);
-      }
-
-      h1 {
-        font-size: clamp(1.7rem, 4vw, 2.5rem);
-        margin: 0.4rem 0 0.6rem;
-        letter-spacing: -0.02em;
-        font-weight: 650;
-      }
-
-      .lede { color: var(--ink-dim); max-width: 68ch; margin: 0; }
-
-      .badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.1rem; }
-
-      .badge {
-        font-family: var(--mono);
-        font-size: 0.7rem;
-        padding: 0.22rem 0.6rem;
-        border-radius: 999px;
-        border: 1px solid var(--line);
-        color: var(--ink-dim);
-        background: var(--panel);
-      }
-
-      .badge.ok { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 40%, var(--line)); }
-      .badge.warn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, var(--line)); }
-
-      section { margin-bottom: 3.2rem; scroll-margin-top: 1rem; }
-
-      h2 {
-        font-size: 0.78rem;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        color: var(--ink-dim);
-        font-weight: 600;
-        margin: 0 0 1.1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.7rem;
-      }
-
-      h2::after {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background: var(--line);
-      }
-
-      h3 { font-size: 1rem; margin: 1.6rem 0 0.6rem; font-weight: 600; }
-
-      p { margin: 0 0 0.9rem; }
-
-      a { color: var(--accent); }
-
-      .card {
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 1.2rem 1.3rem;
-      }
-
-      .diagram {
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 0.5rem;
-        overflow-x: auto;
-      }
-
-      .diagram svg { display: block; width: 100%; height: auto; min-width: 720px; }
-
-      .svg-box { fill: var(--panel-2); stroke: var(--line); stroke-width: 1.5; }
-      .svg-box-source { fill: var(--panel-2); stroke: color-mix(in srgb, var(--accent) 55%, var(--line)); stroke-width: 1.5; }
-      .svg-box-core { fill: var(--panel-2); stroke: color-mix(in srgb, var(--accent) 75%, transparent); stroke-width: 2; }
-      .svg-title { fill: var(--ink); font-family: var(--mono); font-size: 13px; }
-      .svg-sub { fill: var(--ink-dim); font-family: var(--sans); font-size: 11px; }
-      .svg-step { fill: var(--accent); font-family: var(--mono); font-size: 11px; }
-      .svg-label { fill: var(--ink-dim); font-family: var(--mono); font-size: 10.5px; }
-      .svg-flow { stroke: var(--line); stroke-width: 1.6; fill: none; }
-      .svg-flow-active { stroke: var(--accent); stroke-width: 1.8; fill: none; }
-      .svg-flow-dashed { stroke: color-mix(in srgb, var(--warn) 70%, transparent); stroke-width: 1.6; fill: none; stroke-dasharray: 5 4; }
-
-      .steps { display: grid; gap: 0.9rem; }
-
-      .step {
-        display: grid;
-        grid-template-columns: 2.2rem 1fr;
-        gap: 0.9rem;
-        align-items: start;
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        padding: 0.95rem 1.1rem;
-      }
-
-      .step-num {
-        font-family: var(--mono);
-        font-size: 0.8rem;
-        color: var(--accent);
-        border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
-        border-radius: 50%;
-        width: 2.2rem;
-        height: 2.2rem;
-        display: grid;
-        place-items: center;
-      }
-
-      .step h4 { margin: 0 0 0.25rem; font-size: 0.95rem; font-weight: 600; }
-      .step p { margin: 0; color: var(--ink-dim); font-size: 0.9rem; }
-
-      pre {
-        background: var(--panel-2);
-        border: 1px solid var(--line);
-        border-left: 3px solid color-mix(in srgb, var(--accent) 60%, var(--line));
-        border-radius: 8px;
-        padding: 0.95rem 1.1rem;
-        overflow-x: auto;
-        font-family: var(--mono);
-        font-size: 0.8rem;
-        line-height: 1.65;
-        margin: 0.6rem 0 1rem;
-        color: #d8e2ec;
-      }
-
-      code {
-        font-family: var(--mono);
-        font-size: 0.86em;
-        background: var(--panel-2);
-        border: 1px solid var(--line);
-        border-radius: 4px;
-        padding: 0.08em 0.35em;
-      }
-
-      pre code { background: none; border: 0; padding: 0; font-size: 1em; }
-
-      .c-comment { color: #66788a; }
-      .c-key { color: var(--accent); }
-      .c-num { color: var(--ok); }
-      .c-str { color: #d9a15c; }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.86rem;
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        overflow: hidden;
-      }
-
-      th, td {
-        text-align: left;
-        padding: 0.6rem 0.8rem;
-        border-bottom: 1px solid var(--line);
-        vertical-align: top;
-      }
-
-      th {
-        font-family: var(--mono);
-        font-size: 0.68rem;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--ink-dim);
-        font-weight: 600;
-        background: var(--panel-2);
-      }
-
-      tr:last-child td { border-bottom: 0; }
-
-      td code { white-space: nowrap; }
-
-      .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-      .note {
-        border-left: 3px solid var(--warn);
-        background: color-mix(in srgb, var(--warn) 6%, var(--panel));
-        padding: 0.85rem 1rem;
-        border-radius: 0 8px 8px 0;
-        font-size: 0.9rem;
-        margin: 0.8rem 0;
-      }
-
-      .note strong { color: var(--warn); }
-
-      .tree {
-        font-family: var(--mono);
-        font-size: 0.78rem;
-        line-height: 1.75;
-        color: var(--ink-dim);
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        padding: 1rem 1.2rem;
-        overflow-x: auto;
-      }
-
-      .tree b { color: var(--ink); font-weight: 500; }
-      .tree i { color: #66788a; font-style: normal; }
-
-      footer.doc-foot {
-        border-top: 1px solid var(--line);
-        padding-top: 1.2rem;
-        color: var(--ink-dim);
-        font-size: 0.8rem;
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        flex-wrap: wrap;
-      }
-
-      @media (max-width: 820px) {
-        .split { grid-template-columns: 1fr; }
+      .summary strong { color: var(--blue); }
+      .summary p:last-child { margin-bottom: 0; }
+      .quick { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+      .tag { border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; color: var(--muted); font: .76rem var(--mono); }
+      section { margin-top: 44px; scroll-margin-top: 18px; }
+      .section-lede { max-width: 760px; color: var(--muted); }
+      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .card { min-width: 0; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+      .card p:last-child { margin-bottom: 0; }
+      .card p, .card li { color: var(--muted); }
+      .number { display: grid; place-items: center; width: 28px; height: 28px; margin-bottom: 10px; border: 1px solid #39617f; border-radius: 50%; color: var(--blue); font: .8rem var(--mono); }
+      .example { border-left: 3px solid var(--amber); background: #171811; }
+      .example h3 { color: var(--amber); }
+      .flow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px; margin-top: 20px; }
+      .flow-step { position: relative; padding: 16px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+      .flow-step:not(:last-child)::after { content: "→"; position: absolute; top: 42%; right: -19px; color: var(--blue); font: 1rem var(--mono); }
+      .flow-step b { display: block; margin: 4px 0; }
+      .flow-step span { display: block; color: var(--muted); font-size: .87rem; }
+      .flow-step .number { margin-bottom: 8px; }
+      .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+      .legend .card { padding: 16px; }
+      .label { display: inline-block; margin-bottom: 8px; padding: 3px 8px; border-radius: 999px; font: .72rem var(--mono); }
+      .real { color: var(--green); border: 1px solid #326a55; }
+      .sim { color: var(--amber); border: 1px solid #705c35; }
+      .list { margin: 8px 0 0; padding-left: 20px; }
+      .list li { margin: 5px 0; }
+      .scenario-list { display: grid; gap: 10px; margin-top: 16px; }
+      .scenario { display: grid; grid-template-columns: 190px 1fr; gap: 16px; align-items: start; padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+      .scenario b { color: var(--blue); }
+      .scenario p { margin: 0; color: var(--muted); }
+      .warning { margin-top: 16px; padding: 16px 18px; border: 1px solid #66532f; border-radius: 12px; background: #17150f; color: var(--muted); }
+      .warning strong { color: var(--amber); }
+      .status { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .status h3 { display: flex; align-items: center; gap: 8px; }
+      .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green); }
+      .dot.plan { background: var(--amber); }
+      .source-list { display: grid; gap: 9px; }
+      .source-list a { display: block; font-weight: 600; }
+      .source-list span { display: block; color: var(--muted); font-size: .9rem; }
+      .not { color: var(--red); }
+      footer { margin-top: 46px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
+      @media (max-width: 760px) {
+        .flow { grid-template-columns: 1fr; gap: 10px; }
+        .flow-step:not(:last-child)::after { content: "↓"; top: auto; bottom: -19px; right: 50%; z-index: 1; }
+        .grid, .legend, .status { grid-template-columns: 1fr; }
+        .scenario { grid-template-columns: 1fr; gap: 4px; }
+        .page { width: min(100% - 26px, 1040px); padding-top: 28px; }
       }
     </style>
   </head>
   <body>
-    <div class="wrap">
-      <header class="doc-head">
-        <span class="eyebrow">NASA Space Apps Challenge 2026 · Create Health Monitoring Software for Astronauts on Space Missions</span>
-        <h1>AEGIS — arquitectura y lógica del sistema</h1>
-        <p class="lede">
-          Simulador de escenarios de salud de tripulación para una misión a Marte. La actividad
-          solar es real, la fisiología son tasas publicadas, y cada umbral muestra su fuente.
-          Este documento describe cómo encajan las piezas y cómo se calcula un día de misión.
+    <main class="page">
+      <header class="hero">
+        <div class="eyebrow">NASA Space Apps Challenge · Health Monitoring Software</div>
+        <h1>AEGIS: cuidar la salud de la tripulación durante un viaje a Marte</h1>
+        <p class="intro">
+          <strong>AEGIS será un simulador interactivo.</strong> El equipo elige una situación espacial y observa
+          cómo podría cambiar la salud de una tripulación a lo largo de la misión. Una escena 3D muestra la nave
+          y los astronautas; un panel explica los cambios y señala sus fuentes.
         </p>
-        <div class="badges">
-          <span class="badge ok">37 pruebas en verde</span>
-          <span class="badge ok">214 eventos SEP reales</span>
-          <span class="badge ok">58 estudios OSDR</span>
-          <span class="badge">Python stdlib + JavaScript, sin instalación</span>
-          <span class="badge ok">cifras verificadas contra NASA-STD-3001 Rev C</span>
+        <div class="summary">
+          <p><strong>En una frase:</strong> elegimos un escenario —por ejemplo, una tormenta solar— y AEGIS muestra
+            qué indicadores de salud podrían verse afectados, cómo evolucionan y por qué aparece una alerta.</p>
+          <p>No es una nave real, no recibe señales de astronautas reales y no diagnostica ni recomienda tratamientos.
+            Es una demostración educativa basada en datos históricos y modelos simplificados.</p>
+        </div>
+        <div class="quick" aria-label="Resumen del proyecto">
+          <span class="tag">varios escenarios</span>
+          <span class="tag">tripulación simulada</span>
+          <span class="tag">visualización 3D</span>
+          <span class="tag">datos NASA citados</span>
+          <span class="tag">sin hardware requerido</span>
+          <span class="tag">para revisar entre 5 integrantes</span>
         </div>
       </header>
 
-      <section id="arquitectura">
-        <h2>1 · Arquitectura</h2>
-        <div class="diagram">
-          <svg viewBox="0 0 1000 700" role="img" aria-label="Diagrama de arquitectura del sistema AEGIS">
-            <defs>
-              <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-                <path d="M0,0 L9,4.5 L0,9 z" fill="#1e2833" />
-              </marker>
-              <marker id="arrow-active" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-                <path d="M0,0 L9,4.5 L0,9 z" fill="#4ea8de" />
-              </marker>
-              <marker id="arrow-warn" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-                <path d="M0,0 L9,4.5 L0,9 z" fill="#ffb454" />
-              </marker>
-            </defs>
-
-            <!-- Fuentes públicas -->
-            <rect class="svg-box-source" x="120" y="20" width="250" height="62" rx="9" />
-            <text class="svg-step" x="136" y="42">FUENTE REAL</text>
-            <text class="svg-title" x="136" y="60">NASA DONKI · SEP</text>
-            <text class="svg-sub" x="136" y="75">partículas solares, JSON abierto</text>
-
-            <rect class="svg-box-source" x="640" y="20" width="250" height="62" rx="9" />
-            <text class="svg-step" x="656" y="42">FUENTE REAL</text>
-            <text class="svg-title" x="656" y="60">NASA OSDR · ALSDA</text>
-            <text class="svg-sub" x="656" y="75">estudios de fisiología de vuelo</text>
-
-            <path class="svg-flow" d="M245 82 L245 120" marker-end="url(#arrow)" />
-            <path class="svg-flow" d="M765 82 L765 120" marker-end="url(#arrow)" />
-            <text class="svg-label" x="255" y="106">fetch, una vez</text>
-            <text class="svg-label" x="775" y="106">fetch, una vez</text>
-
-            <!-- Muestra versionada -->
-            <rect class="svg-box" x="230" y="120" width="550" height="62" rx="9" />
-            <text class="svg-step" x="246" y="142">PASO 1 · MUESTRA VERSIONADA</text>
-            <text class="svg-title" x="246" y="160">data/donki-sep.json · data/osdr-bone-studies.json</text>
-            <text class="svg-sub" x="246" y="175">el dataset completo nunca entra al repositorio; la muestra se regenera con un comando</text>
-
-            <path class="svg-flow-active" d="M505 182 L505 222" marker-end="url(#arrow-active)" />
-            <text class="svg-label" x="515" y="208">carga en memoria</text>
-
-            <!-- Motor -->
-            <rect class="svg-box-core" x="230" y="222" width="550" height="96" rx="9" />
-            <text class="svg-step" x="246" y="244">PASO 2 · MOTOR DE ESCENARIOS</text>
-            <text class="svg-title" x="246" y="263">engine/radiation.py · physiology.py · simulator.py</text>
-            <text class="svg-sub" x="246" y="281">gcr + eventos SEP del día → dosis · acumulación de hueso, músculo, sueño, estrés</text>
-            <text class="svg-sub" x="246" y="297">engine/citations.py guarda cada constante con su fuente</text>
-            <text class="svg-sub" x="246" y="311">salida: un frame JSON por día de misión</text>
-
-            <path class="svg-flow-active" d="M505 318 L505 358" marker-end="url(#arrow-active)" />
-            <text class="svg-label" x="515" y="344">1 frame = 1 día</text>
-
-            <!-- Servidor -->
-            <rect class="svg-box-core" x="230" y="358" width="550" height="86" rx="9" />
-            <text class="svg-step" x="246" y="380">PASO 3 · SERVIDOR DE TELEMETRÍA</text>
-            <text class="svg-title" x="246" y="399">server/app.py — sólo biblioteca estándar</text>
-            <text class="svg-sub" x="246" y="417">GET /api/scenarios · /api/simulate · /api/evidence · /stream (SSE)</text>
-            <text class="svg-sub" x="246" y="433">el mismo frame se publica tal cual por MQTT si se habilita</text>
-
-            <path class="svg-flow-active" d="M505 444 L505 486" marker-end="url(#arrow-active)" />
-            <text class="svg-label" x="515" y="472">text/event-stream</text>
-
-            <!-- Orquestador -->
-            <rect class="svg-box" x="230" y="486" width="550" height="66" rx="9" />
-            <text class="svg-step" x="246" y="508">PASO 4 · ORQUESTADOR EN EL NAVEGADOR</text>
-            <text class="svg-title" x="246" y="527">web/js/app.js</text>
-            <text class="svg-sub" x="246" y="543">recibe, guarda historial y publica el evento DOM «aegis:frame»</text>
-
-            <path class="svg-flow" d="M400 552 L400 596" marker-end="url(#arrow)" />
-            <path class="svg-flow" d="M610 552 L610 596" marker-end="url(#arrow)" />
-            <text class="svg-label" x="300" y="580">evento DOM</text>
-            <text class="svg-label" x="620" y="580">evento DOM</text>
-
-            <!-- Módulos -->
-            <rect class="svg-box" x="200" y="596" width="270" height="66" rx="9" />
-            <text class="svg-step" x="216" y="618">PASO 5a</text>
-            <text class="svg-title" x="216" y="637">web/js/dashboard.js</text>
-            <text class="svg-sub" x="216" y="653">gráficas, alertas citadas, triage</text>
-
-            <rect class="svg-box" x="540" y="596" width="270" height="66" rx="9" />
-            <text class="svg-step" x="556" y="618">PASO 5b</text>
-            <text class="svg-title" x="556" y="637">web/js/scene.js</text>
-            <text class="svg-sub" x="556" y="653">nave, Marte y astronauta en 3D</text>
-
-            <!-- Evidencia: server -> corpus -->
-            <path class="svg-flow-dashed" d="M780 401 L940 401 L940 51 L893 51" marker-end="url(#arrow-warn)" />
-            <text class="svg-label" x="792" y="342">/api/evidence</text>
-            <text class="svg-label" x="792" y="358">devuelve estudios</text>
-            <text class="svg-label" x="792" y="374">reales, nunca</text>
-            <text class="svg-label" x="792" y="390">inventados</text>
-          </svg>
+      <section id="experiencia">
+        <h2>¿Qué verá la persona que use la demo?</h2>
+        <p class="section-lede">La pantalla reúne el escenario y la información de salud. La persona puede seguir la misión día a día y entender de dónde viene cada alerta.</p>
+        <div class="grid">
+          <article class="card"><div class="number">1</div><h3>La misión en 3D</h3><p>Una nave, Marte y una tripulación simulada. La escena cambia según la etapa del viaje y resalta visualmente si el escenario presenta un riesgo.</p></article>
+          <article class="card"><div class="number">2</div><h3>Indicadores de salud</h3><p>Tarjetas y gráficas muestran radiación acumulada, sueño, hueso, músculo y capacidad aeróbica. Frecuencia cardíaca y oxígeno aparecen como datos ilustrativos, sin umbrales médicos.</p></article>
+          <article class="card"><div class="number">3</div><h3>Alertas con explicación</h3><p>Si se supera un umbral del modelo, la alerta muestra el valor, el motivo y la fuente. La pantalla distingue una señal del escenario de un problema médico real.</p></article>
+          <article class="card"><div class="number">4</div><h3>Ayuda para entender la evidencia</h3><p>La propuesta incluye un módulo que resumirá la alerta en lenguaje sencillo y enlazará estudios de NASA. No inventará estudios ni dará diagnósticos; ese módulo aún no está implementado.</p></article>
         </div>
-        <p class="note">
-          <strong>Regla de diseño:</strong> ningún módulo conoce a otro. El bus es el frame JSON.
-          Por eso el visor 3D puede sustituirse por Unity sin tocar el motor, y por eso las piezas
-          se construyen en paralelo sin pisarse.
-        </p>
       </section>
 
-      <section id="logica">
-        <h2>2 · La lógica: un día de misión</h2>
-        <div class="steps">
-          <div class="step">
-            <div class="step-num">1</div>
-            <div>
-              <h4>Fecha real</h4>
-              <p>El día simulado <code>d</code> se traduce a un día de calendario:
-                <code>fecha = epoch + d</code>. La misión vive en el calendario real, no en el vacío.</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-num">2</div>
-            <div>
-              <h4>Entorno de radiación</h4>
-              <p>Fondo de rayos cósmicos galácticos según la fase, más la dosis de los eventos
-                solares que DONKI registró en esa fecha concreta.</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-num">3</div>
-            <div>
-              <h4>Estado de cada tripulante</h4>
-              <p>Acumulación diaria de dosis, hueso y músculo; sueño, estrés y frecuencia cardíaca
-                derivados de la carga del día.</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-num">4</div>
-            <div>
-              <h4>Alertas explicables</h4>
-              <p>Cada umbral cruzado genera una alerta con su valor, su límite y el documento
-                del que sale ese límite.</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-num">5</div>
-            <div>
-              <h4>Publicación</h4>
-              <p>El frame se emite por SSE. El dashboard dibuja, la escena 3D colorea, y el
-                triage busca el estudio de OSDR que respalda el indicador alterado.</p>
-            </div>
-          </div>
-        </div>
-
-        <h3>El cálculo, sin adornos</h3>
-        <pre><code><span class="c-comment"># ---- radiación ----</span>
-gcr       = <span class="c-num">1.3</span> mSv/día en tránsito   |  <span class="c-num">0.9</span> mSv/día en superficie   <span class="c-comment">(diseño, NASA-STD-3001 §4.8.5)</span>
-sep_día   = <span class="c-num">2.0</span> mSv si DONKI registró un evento esa fecha calendario   <span class="c-comment">(por día de evento, no por fila)</span>
-dosis_día = gcr + sep_día
-dosis_acumulada += dosis_día
-
-<span class="c-comment"># ---- fisiología, por tripulante ----</span>
-bmd      -= (<span class="c-num">1.0</span> %/mes ÷ <span class="c-num">30.4</span>) × <span class="c-num">0.5</span> si está en superficie
-músculo  -= (<span class="c-num">1.5</span> %/mes ÷ <span class="c-num">30.4</span>) × <span class="c-num">0.5</span> si está en superficie
-aeróbico -= (<span class="c-num">2.5</span> %/mes ÷ <span class="c-num">30.4</span>) × <span class="c-num">0.5</span> si está en superficie, tope −<span class="c-num">25</span> %
-sueño     = <span class="c-num">6.1</span> h + ruido − <span class="c-num">0.8</span> si hay tormenta
-estrés    = <span class="c-num">0.20</span> + <span class="c-num">0.35</span>·tormenta + deuda_de_sueño/<span class="c-num">60</span> + ruido
-fc        = base(<span class="c-num">62</span>–<span class="c-num">74</span>) + min(<span class="c-num">12</span>, dosis/<span class="c-num">90</span>) + <span class="c-num">8</span>·tormenta + ruido
-spo2      = <span class="c-num">97</span> − <span class="c-num">0.4</span>·tormenta + ruido
-
-<span class="c-comment"># ---- alertas ----</span>
-dosis ≥ <span class="c-num">600</span> mSv · dosis aguda ≥ <span class="c-num">250</span> mSv · tormenta activa
-sueño &lt; <span class="c-num">5.5</span> h · hueso ≤ −<span class="c-num">6</span> % · estrés ≥ <span class="c-num">0.75</span></code></pre>
-
-        <h3>Variables y su fuente</h3>
-        <table>
-          <thead>
-            <tr><th>Variable</th><th>Valor</th><th>Fuente declarada</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Dosis de carrera</td><td>600 mSv</td><td>NASA-STD-3001 Vol 1 Rev C §4.8.2 — universal, sin distinción de edad ni sexo</td></tr>
-            <tr><td>Dosis aguda por evento de referencia</td><td>250 mSv</td><td>NASA-STD-3001 Vol 1 Rev C §4.8.3</td></tr>
-            <tr><td>Rayos cósmicos, tránsito</td><td>1.3 mSv/día</td><td>NASA-STD-3001 Rev C §4.8.5, tasa de diseño en espacio libre</td></tr>
-            <tr><td>Rayos cósmicos, superficie</td><td>0.9 mSv/día</td><td>NASA-STD-3001 Rev C §4.8.5, tasa de diseño en superficie planetaria</td></tr>
-            <tr><td>Ambiente exterior medido</td><td>1.84 / 0.64 mSv/día</td><td>Zeitlin 2013 y Hassler 2014, <i>Science</i> (MSL/RAD, fuera del casco) — contexto, no dosis de tripulación</td></tr>
-            <tr><td>Pérdida ósea</td><td>1.0 %/mes (×0.5 en Marte)</td><td>LeBlanc et al. 2000; Sibonga et al. 2007: 1–1.5 %/mes en cadera</td></tr>
-            <tr><td>Pérdida muscular</td><td>1.5 %/mes</td><td>LeBlanc et al. 2000, <i>J Appl Physiol</i> 89:2158 (5–17 % en 16–28 semanas)</td></tr>
-            <tr><td>Capacidad aeróbica</td><td>2.5 %/mes, tope −25 %</td><td>NASA-STD-3001 Rev C: 15 % de declive medio en seis meses</td></tr>
-            <tr><td>Sueño basal</td><td>6.1 h</td><td>Barger et al. 2014, <i>Lancet Neurology</i> 13(9):904 (6.09 ± 0.67 h)</td></tr>
-            <tr><td>Dosis por día de evento solar</td><td>2.0 mSv</td><td>Valores publicados por evento: 1.2–19.5 mSv según blindaje. No existe conversión publicada de pfu a mSv</td></tr>
-            <tr><td>Índice de estrés</td><td>0–1 <b>(proxy)</b></td><td>Indicador compuesto, no escala clínica</td></tr>
-            <tr><td>Frecuencia cardíaca y SpO₂</td><td><b>sin umbral</b></td><td>Ninguna norma publicada: NASA-STD-3001 no fija valores en vuelo. Se muestran como telemetría descriptiva y nunca generan alerta</td></tr>
-          </tbody>
-        </table>
+      <section id="ejemplo">
+        <h2>Un ejemplo de principio a fin</h2>
+        <article class="card example">
+          <h3>Escenario: tormenta solar durante el viaje a Marte</h3>
+          <p>Seleccionamos el escenario histórico de mayo de 2024. AEGIS encuentra eventos solares reales de NASA DONKI en esas fechas y los coloca en el calendario simulado. En el día de uno de esos eventos, el panel lo destaca; la gráfica muestra cómo cambian los indicadores del modelo y la tripulación aparece resaltada en la escena 3D. La alerta explica que se trata de actividad solar y enlaza la evidencia disponible.</p>
+          <p><strong>Importante:</strong> el dato de DONKI es una medición de partículas, no una dosis exacta recibida por una persona. AEGIS no puede calcular esa dosis sólo con ese dato; la respuesta del modelo es una aproximación declarada, no una predicción.</p>
+        </article>
       </section>
 
-      <section id="contratos">
-        <h2>3 · Contratos entre piezas</h2>
-        <p>Un frame del motor, capturado de una ejecución real en el día 24 del escenario
-          de tormenta: <code>2024-05-09</code>, con un evento SEP verdadero.</p>
-        <pre><code>{
-  <span class="c-key">"t_day"</span>: <span class="c-num">24.0</span>,
-  <span class="c-key">"calendar_day"</span>: <span class="c-str">"2024-05-09"</span>,
-  <span class="c-key">"phase"</span>: <span class="c-str">"transit_out"</span>,
-  <span class="c-key">"environment"</span>: {
-    <span class="c-key">"sep_active"</span>: true,
-    <span class="c-key">"sep_event_id"</span>: <span class="c-str">"2024-05-09T13:59Z"</span>,
-    <span class="c-key">"gcr_msv_day"</span>: <span class="c-num">1.3</span>,
-    <span class="c-key">"shield_g_cm2"</span>: <span class="c-num">20.0</span>
-  },
-  <span class="c-key">"crew"</span>: [{
-    <span class="c-key">"id"</span>: <span class="c-str">"CDR"</span>, <span class="c-key">"role"</span>: <span class="c-str">"Commander"</span>,
-    <span class="c-key">"hr_bpm"</span>: <span class="c-num">75.4</span>, <span class="c-key">"spo2_pct"</span>: <span class="c-num">96.9</span>, <span class="c-key">"sleep_h"</span>: <span class="c-num">6.6</span>,
-    <span class="c-key">"stress_index"</span>: <span class="c-num">0.75</span>, <span class="c-key">"bmd_pct"</span>: <span class="c-num">-0.82</span>,
-    <span class="c-key">"aerobic_pct"</span>: <span class="c-num">-2.1</span>, <span class="c-key">"dose_msv"</span>: <span class="c-num">34.5</span>,
-    <span class="c-key">"dose_rate_msv_day"</span>: <span class="c-num">3.3</span>
-  }],
-  <span class="c-key">"alerts"</span>: [{
-    <span class="c-key">"indicator"</span>: <span class="c-str">"sep_active"</span>, <span class="c-key">"severity"</span>: <span class="c-str">"warning"</span>,
-    <span class="c-key">"message"</span>: <span class="c-str">"Solar energetic particle event in progress…"</span>,
-    <span class="c-key">"source"</span>: <span class="c-str">"DONKI SEP 2024-05-09T13:59Z"</span>
-  }]
-}</code></pre>
-
-        <div class="split">
-          <div class="card">
-            <h3 style="margin-top: 0">Evento DOM</h3>
-            <pre style="margin-bottom: 0"><code>window.addEventListener(
-  <span class="c-str">"aegis:frame"</span>, e =&gt; {
-    e.detail.frame      <span class="c-comment">// un día</span>
-    e.detail.history    <span class="c-comment">// días previos</span>
-    e.detail.scenario   <span class="c-comment">// id activo</span>
-  })</code></pre>
-          </div>
-          <div class="card">
-            <h3 style="margin-top: 0">Endpoints</h3>
-            <table style="border: 0; background: none">
-              <tbody>
-                <tr><td><code>/api/scenarios</code></td><td>catálogo</td></tr>
-                <tr><td><code>/api/simulate</code></td><td>timeline completo</td></tr>
-                <tr><td><code>/stream</code></td><td>SSE en vivo</td></tr>
-                <tr><td><code>/api/evidence</code></td><td>estudios OSDR</td></tr>
-              </tbody>
-            </table>
-          </div>
+      <section id="recorrido">
+        <h2>¿Cómo trabaja el sistema?</h2>
+        <p class="section-lede">Piense en cada día de misión como una ficha. El simulador crea la ficha y las pantallas la convierten en información fácil de seguir.</p>
+        <div class="flow" aria-label="Flujo de información del sistema">
+          <div class="flow-step"><div class="number">1</div><b>Datos de NASA</b><span>Eventos solares e investigaciones publicadas.</span></div>
+          <div class="flow-step"><div class="number">2</div><b>Elegir escenario</b><span>Tormenta, viaje largo, día tranquilo o evento de prueba.</span></div>
+          <div class="flow-step"><div class="number">3</div><b>Simular un día</b><span>El modelo actualiza entorno e indicadores de la tripulación ficticia.</span></div>
+          <div class="flow-step"><div class="number">4</div><b>Explicar alertas</b><span>Se compara con límites citados y se muestra la causa.</span></div>
+          <div class="flow-step"><div class="number">5</div><b>Verlo y explorarlo</b><span>Panel, gráficas, escena 3D y evidencia relacionada.</span></div>
         </div>
+      </section>
+
+      <section id="realidad">
+        <h2>¿Qué es real y qué es simulado?</h2>
+        <p class="section-lede">Esta distinción es esencial: el proyecto usa observaciones reales como contexto, pero no tiene datos privados de astronautas.</p>
+        <div class="legend">
+          <article class="card"><span class="label real">DATOS REALES</span><h3>Lo que viene de fuentes públicas</h3><ul class="list"><li>Fechas e identificadores de eventos de partículas solares registrados por NASA DONKI.</li><li>Fichas de investigaciones de biología espacial de NASA OSDR.</li><li>Normas y estudios publicados que sirven de referencia para algunos valores.</li></ul></article>
+          <article class="card"><span class="label sim">SIMULACIÓN</span><h3>Lo que crea el modelo</h3><ul class="list"><li>Los cuatro astronautas y sus lecturas diarias; no son personas reales.</li><li>La evolución del sueño, hueso, músculo y capacidad aeróbica durante la misión.</li><li>El índice de estrés y la respuesta simplificada a eventos solares.</li><li>La animación de la nave, Marte y las alertas.</li></ul></article>
+        </div>
+        <div class="warning"><strong>Límite científico:</strong> la conversión de actividad solar a dosis personal requiere conocer el espectro de partículas y el blindaje de la nave. El prototipo no tiene esos datos completos. Por eso no presentamos la dosis de un evento como una medición real; mostramos la simplificación y su fuente junto al resultado.</div>
       </section>
 
       <section id="escenarios">
-        <h2>4 · Escenarios</h2>
-        <table>
-          <thead>
-            <tr><th>Id</th><th>Duración</th><th>Qué demuestra</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>mars_storm_2024</code></td><td>90 días</td>
-              <td>Cruza la serie de tormentas de mayo de 2024, la mayor del ciclo solar 25. 6 días con eventos reales.</td>
-            </tr>
-            <tr>
-              <td><code>mars_full_transit</code></td><td>900 días</td>
-              <td>Misión completa: ida, estancia y vuelta, con toda la actividad solar registrada entre 2024 y 2026.</td>
-            </tr>
-            <tr>
-              <td><code>quiet_cruise</code></td><td>30 días</td>
-              <td>Control: sin tormenta, la tripulación debe permanecer nominal. Si aquí salta una alerta crítica, el motor está mal.</td>
-            </tr>
-            <tr>
-              <td><code>design_reference_spe</code></td><td>12 días</td>
-              <td>Peor caso: un evento único de 250 mSv, el de referencia de diseño de la NASA. Demuestra que la alerta aguda dispara cuando debe.</td>
-            </tr>
-          </tbody>
-        </table>
+        <h2>Situaciones que queremos demostrar</h2>
+        <div class="scenario-list">
+          <article class="scenario"><b>Tormenta solar<br />90 días</b><p>Una ventana histórica alrededor de mayo de 2024. Sirve para ver cómo el sistema señala actividad solar registrada de verdad.</p></article>
+          <article class="scenario"><b>Viaje completo<br />900 días</b><p>Un ejemplo de misión con salida, estancia en Marte y regreso. Permite observar tendencias acumuladas; no es un pronóstico de una misión real.</p></article>
+          <article class="scenario"><b>Viaje tranquilo<br />30 días</b><p>Escenario de control: ayuda a comprobar qué muestra el sistema cuando no hay eventos solares destacados.</p></article>
+          <article class="scenario"><b>Evento de referencia<br />12 días</b><p>Prueba controlada que usa el límite de diseño de NASA para verificar que la alerta aguda funciona. No representa una observación real de DONKI.</p></article>
+        </div>
       </section>
 
-      <section id="estructura">
-        <h2>5 · Estructura del repositorio</h2>
-        <div class="tree">
-<b>hackaton/</b>
-├── <b>pipeline/</b>            <i>descarga reproducible de la muestra</i>
-│   ├── fetch_donki.py      <i>documenta el límite de 60 días de la API</i>
-│   └── fetch_osdr.py
-├── <b>data/</b>                <i>muestra versionada + contrato</i>
-│   ├── manifest.json       <i>contrato del frame y unidades</i>
-│   ├── donki-sep.json      <i>214 eventos reales</i>
-│   └── osdr-bone-studies.json
-├── <b>engine/</b>              <i>la lógica, sin servidor ni navegador</i>
-│   ├── citations.py        <i>cada número con su fuente</i>
-│   ├── radiation.py
-│   ├── physiology.py
-│   ├── scenarios.py
-│   └── simulator.py
-├── <b>server/</b>              <i>HTTP y SSE, sólo stdlib</i>
-│   └── app.py
-├── <b>web/</b>
-│   ├── index.html
-│   ├── css/app.css
-│   ├── js/app.js           <i>orquestador</i>
-│   ├── js/dashboard.js     <i>gráficas, alertas, triage</i>
-│   ├── js/scene.js         <i>3D</i>
-│   └── vendor/three.module.js
-├── <b>tests/</b>               <i>32 pruebas, sin red</i>
-│   ├── test_pipeline.py
-│   ├── test_engine.py
-│   └── test_server.py
-└── <b>odd/tasks/aegis.md</b>   <i>pliego: specs, tareas y registro</i>
+      <section id="piezas">
+        <h2>¿Qué piezas vamos a construir?</h2>
+        <div class="grid">
+          <article class="card"><h3>1. Preparación de datos</h3><p>Descarga una muestra pequeña de datos NASA y la guarda para que la demo pueda abrirse sin depender de una conexión activa a esos servicios.</p></article>
+          <article class="card"><h3>2. Simulador</h3><p>Combina el escenario elegido, el calendario y las reglas del modelo. Produce una ficha por día con el estado del entorno y de cada astronauta simulado.</p></article>
+          <article class="card"><h3>3. Servidor de la demo</h3><p>Entrega al navegador los escenarios y las fichas día a día. Es un canal de telemetría simulado; no se conecta a sensores reales.</p></article>
+          <article class="card"><h3>4. Pantalla y escena 3D</h3><p>La pantalla escucha las fichas y actualiza el panel, las gráficas, las alertas y la nave. Todos muestran los mismos datos para no contradecirse.</p></article>
+        </div>
+        <div class="summary">
+          <p><strong>MQTT y sensores físicos:</strong> en el dibujo original aparecía una conexión MQTT. La dejamos como una posible extensión; el alcance actual funciona con telemetría simulada y no requiere ESP32, sensores, broker ni Wi-Fi del evento.</p>
+          <p><strong>Fuera del proyecto:</strong> AC/DC, 220 V, circuitos eléctricos y Rust. Usted indicó que esas partes pertenecían a otro tema.</p>
+        </div>
+      </section>
+
+      <section id="revision">
+        <h2>Para revisar entre los cinco integrantes</h2>
+        <p class="section-lede">Esta página presenta el plan del proyecto. Antes de cerrar la demo, el equipo puede acordar estos tres puntos juntos:</p>
+        <div class="grid">
+          <article class="card"><h3>Escenarios</h3><p>¿La tormenta solar durante el viaje a Marte debe ser el ejemplo principal?</p></article>
+          <article class="card"><h3>Información de salud</h3><p>¿Radiación, sueño, hueso, músculo y capacidad aeróbica explican bien lo que queremos mostrar?</p></article>
+          <article class="card"><h3>Experiencia visual</h3><p>¿La nave y la tripulación en 3D, junto con las gráficas y alertas, cuentan la historia con claridad?</p></article>
+          <article class="card"><h3>Alcance</h3><p>¿Confirmamos que la demo funcionará con tripulación simulada y sin depender de hardware físico?</p></article>
         </div>
       </section>
 
       <section id="estado">
-        <h2>6 · Estado y límites declarados</h2>
-        <div class="split">
-          <div class="card">
-            <h3 style="margin-top: 0">Funciona y está probado</h3>
-            <ul style="margin: 0; padding-left: 1.1rem; color: var(--ink-dim)">
-              <li>Descarga real de DONKI y OSDR, con validación del límite de 60 días.</li>
-              <li>Motor determinista: misma semilla, mismo stream.</li>
-              <li>Dosis monótona; los días de tormenta citan su evento DONKI.</li>
-              <li>Servidor SSE, timeline y evidencia, ejercitados contra un socket real.</li>
-              <li>Misión de 900 días: 1092 mSv, dentro de la estimación publicada (~1.0 Sv) y por encima del límite de carrera en el día 488.</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h3 style="margin-top: 0">Límites declarados</h3>
-            <ul style="margin: 0; padding-left: 1.1rem; color: var(--ink-dim)">
-              <li>Dashboard y escena 3D: en construcción.</li>
-              <li>No existe conversión publicada de flujo protónico a dosis: el valor por evento se toma de mediciones publicadas, no de una fórmula.</li>
-              <li>Frecuencia cardíaca y SpO₂ no tienen norma publicada; se muestran sin umbral.</li>
-              <li>El índice de estrés es un proxy declarado.</li>
-              <li>No es dosimetría ni diagnóstico médico.</li>
-            </ul>
-          </div>
+        <h2>Estado actual del trabajo</h2>
+        <div class="status">
+          <article class="card"><h3><span class="dot"></span>Base construida</h3><p>Descarga y muestra de datos NASA, simulador, servidor y pruebas automáticas. Hay cuatro escenarios definidos.</p></article>
+          <article class="card"><h3><span class="dot plan"></span>Interfaz en construcción</h3><p>El panel visual y la escena 3D son los siguientes módulos. La asistencia en lenguaje sencillo está planteada, pero aún no está implementada.</p></article>
         </div>
       </section>
 
-      <footer class="doc-foot">
-        <span>AEGIS · documento de arquitectura · generado durante el hackatón</span>
-        <span>Datos: NASA DONKI · NASA OSDR · umbrales citados en engine/citations.py</span>
+      <section id="fuentes">
+        <h2>Fuentes principales</h2>
+        <div class="card source-list">
+          <div><a href="https://ccmc.gsfc.nasa.gov/tools/DONKI/" target="_blank" rel="noreferrer">NASA DONKI · eventos de clima espacial</a><span>Fuente de las fechas e identificadores de eventos solares del escenario histórico.</span></div>
+          <div><a href="https://osdr.nasa.gov/" target="_blank" rel="noreferrer">NASA Open Science Data Repository (OSDR)</a><span>Catálogo abierto de estudios de biología espacial; los registros no son historiales médicos de astronautas.</span></div>
+          <div><a href="https://standards.nasa.gov/sites/default/files/standards/NASA/C/nasa-std-3001-vol-1-rev-c-signature.pdf" target="_blank" rel="noreferrer">NASA-STD-3001, Volumen 1, Revisión C</a><span>Estándar NASA de salud humana en vuelos espaciales. Incluye los límites de dosis citados por el prototipo.</span></div>
+          <div><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4188436/" target="_blank" rel="noreferrer">Barger et al. · sueño de tripulaciones en vuelo espacial</a><span>Estudio publicado sobre sueño en tripulaciones Shuttle y de la Estación Espacial Internacional.</span></div>
+        </div>
+      </section>
+
+      <footer>
+        <strong>AEGIS</strong> · propuesta para revisión del equipo de cinco integrantes · simulación educativa, no herramienta médica.
+        <br />Código y datos de muestra: <a href="https://github.com/runer0101/spaceapps-2026-aegis" target="_blank" rel="noreferrer">repositorio público del proyecto</a>.
       </footer>
-    </div>
+    </main>
   </body>
 </html>

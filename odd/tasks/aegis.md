@@ -55,3 +55,5 @@ L2 (user, verbatim, with sketch `/home/runer/Downloads/080a2760-33f6-4688-b28a-2
 L3 (user, verbatim, decisions): «eso de ac dc es de otro tema no es relevante para el proyecto todo lo demas si» · «Todo simulado, MQTT opcional» · «Tormenta solar en misión a Marte (radiación)» · «Sin Rust: Python para datos, JS para la app»
 
 L4 (evidence, verified 2026-11-14 from this machine): DONKI SEP returns real events — 27 in 2024-05-01..2024-06-30 (the May 2024 storm series), 13 in 2025-01-01..2025-03-01, 11 in 2026-08-06..2026-10-04. OSDR returns 54 studies for "bone loss" (19 ALSDA with DXA/micro-CT/histomorphometry). NTRS search API returns results. PDS MSL RAD index exceeded a 30 s timeout and is treated as unavailable.
+
+L5 (user, verbatim): «si esta bien es para que lo miren los demas del equipo somos 5 integrantes». Audience: the project overview is for the five-person team to review together.
